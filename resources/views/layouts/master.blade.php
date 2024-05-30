@@ -158,31 +158,31 @@
               </li>
             </ul>
           </li>
-          <!-- Manajemen Siswa -->
-          <li class="nav-item has-treeview mb-12">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-user-graduate"></i>
-              <p>
-                Manajemen Siswa
-                <i class="right fas fa-angle-left"></i>
-              </p>
+         <!-- Manajemen Siswa -->
+          <li class="nav-item has-treeview mb-12 {{ Request::is('students*') ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ Request::is('students*') ? 'active' : '' }}">
+                <i class="nav-icon fas fa-user-graduate"></i>
+                <p>
+                    Manajemen Siswa
+                    <i class="right fas fa-angle-left"></i>
+                </p>
             </a>
             <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <p>Contoh 1</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <p>Contoh 2</p>
-                </a>
-              </li>
+                <li class="nav-item">
+                    <a href="{{ route('students.index') }}" class="nav-link {{ Request::is('students') ? 'active' : '' }}">
+                        <p>Profil Siswa</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('students.show', ['student' =>2]) }}" class="nav-link {{ Request::is('students/*') ? 'active' : '' }}">
+                        <p>Kelola Siswa</p>
+                    </a>
+                </li>
             </ul>
           </li>
           <!-- Manajemen Guru -->
-          <li class="nav-item has-treeview mb-12">
-            <a href="#" class="nav-link">
+          <li class="nav-item has-treeview mb-12 {{ Request::is('teachers*') ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ Request::is('teachers*') ? 'active' : '' }}">
               <i class="nav-icon fas fa-chalkboard-teacher"></i>
               <p>
                 Manajemen Guru
@@ -191,13 +191,13 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <p>Contoh 1</p>
+                <a href="{{ route('teachers.index') }}" class="nav-link {{ Request::is('teachers') ? 'active' : '' }}">
+                  <p>Profil Guru</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <p>Contoh 2</p>
+                <a href="{{ route('teachers.show', ['teacher' =>3]) }}" class="nav-link {{ Request::is('teachers/*') ? 'active' : '' }}">
+                  <p>Kelola Guru</p>
                 </a>
               </li>
             </ul>
@@ -277,6 +277,7 @@
   @yield('content')
 
   <!-- REQUIRED SCRIPTS -->
+  @include('sweetalert::alert')
   <!-- jQuery -->
   <script src="{{ asset('assets/plugins/jquery/jquery.min.js') }}"></script>
   <!-- Bootstrap 4 -->
