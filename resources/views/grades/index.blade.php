@@ -1,8 +1,5 @@
-<!-- resources/views/students/index.blade.php -->
+<!-- resources/views/grades/index.blade.php -->
 @extends('layouts.master')
-@php
-    use Carbon\Carbon;
-@endphp
 
 @section('addCss')
 <link rel="stylesheet" href="{{ asset('css/dataTables.bootstrap4.min.css') }}">
@@ -16,7 +13,6 @@
         $("#data-table").DataTable();
     })
     </script>
-    <script src="{{ asset('js/sweetalert.min.js') }}"></script>
     <script>
         function confirmDelete(button) {
             var url = $(button).data('url');
@@ -38,7 +34,7 @@
     </script>    
 @endsection
 
-@section('title', 'Students')
+@section('title', 'Grades')
 
 @section('content')
 <!-- Content Wrapper. Contains page content -->
@@ -52,7 +48,7 @@
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="{{ route('home')}}">Home</a></li>
-              <li class="breadcrumb-item active">Students</li>
+              <li class="breadcrumb-item active">Grades</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -64,45 +60,41 @@
     <div class="content">
          <div class="container mt-5">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h1>Students SMK Gamelab</h1>
-                <a href="{{ route('createStudents') }}" class="btn btn-primary">Add Student</a>
+                <h1>Grades Students SMK Gamelab</h1>
+                <a href="{{ route('createGrades') }}" class="btn btn-primary">Add Grade</a>
             </div>
-        
+            
             <div class="card">
                 <div class="card-body">
                     <table class="table table-hover mb-0" id="data-table">
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Name</th>
-                                <th>Class</th>
-                                <th>Birth Date</th>
-                                <th>Address</th>
-                                <th>Phone Number</th>
+                                <th>Student</th>
+                                <th>Subject</th>
+                                <th>Grade</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($students as $student)
-                                <tr>
-                                    <td> {{ $loop->index + 1}}</td>
-                                    <td>{{ $student->name }}</td>
-                                    <td>{{ $student->class }}</td>
-                                    <td>{{ Carbon::parse($student->birth_date)->format('d-m-Y') }}</td>
-                                    <td>{{ $student->address }}</td>
-                                    <td>{{ $student->phone_number }}</td>
-                                    <td>
-                                        <a href="{{ route('showStudents', $student) }}" class="btn btn-info btn-sm">View</a>
-                                        <a href="{{ route('editStudents', $student) }}" class="btn btn-warning btn-sm">Edit</a>
-                                        <a href="#" onclick="confirmDelete(this)" data-url="{{ route('deleteStudents', ['student' => $student->id]) }}" class="btn btn-danger btn-sm">Delete</a>
+                            @foreach($grades as $grade)
+                            <tr>
+                                <td> {{ $loop->index + 1}}</td>
+                                <td>{{ $grade->student->name }}</td>
+                                <td>{{ $grade->subject }}</td>
+                                <td>{{ $grade->grade }}</td>
+                                <td>
+                                    <a href="{{ route('showGrades', $grade) }}" class="btn btn-info btn-sm">View</a>
+                                    <a href="{{ route('editGrades', $grade) }}" class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="#" onclick="confirmDelete(this)" data-url="{{ route('deleteGrades', ['grade' => $grade->id]) }}" class="btn btn-danger btn-sm">Delete</a>
                                         <!-- Form Delete -->
                                         <form id="delete-form" method="POST" style="display: none;">
                                             @csrf
                                             @method('DELETE')
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach
+                                        </form>   
+                                </td>
+                            </tr>
+                        @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -114,3 +106,4 @@
 <!-- /.content-wrapper -->
 
 @endsection
+

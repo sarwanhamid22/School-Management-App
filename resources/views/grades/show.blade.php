@@ -1,10 +1,7 @@
-<!-- resources/views/students/show.blade.php -->
+<!-- resources/views/grades/show.blade.php -->
 @extends('layouts.master')
 
-@section('title', 'Student Details')
-@php
-    use Carbon\Carbon;
-@endphp
+@section('title', 'Grade Details')
 
 @section('content')
 <!-- Content Wrapper. Contains page content -->
@@ -18,8 +15,8 @@
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{ route('home')}}">Home</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('listStudents') }}">Students</a></li>
-                        <li class="breadcrumb-item active">Student Details</li>
+                        <li class="breadcrumb-item"><a href="{{ route('listGrades') }}">Grades</a></li>
+                        <li class="breadcrumb-item active">Grade Details</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -29,33 +26,25 @@
 
     <!-- Main content -->
     <div class="container mt-5">
-        <h1 class="mt-5">Student Details</h1>
+        <h1 class="mt-5">Grade Details</h1>
         <div class="card">
             <div class="card-body">
                 <table class="table table-bordered">
                     <tr>
-                        <th>Name</th>
-                        <td>{{ $student->name }}</td>
+                        <th>Student</th>
+                        <td>{{ $grade->student->name }}</td>
                     </tr>
                     <tr>
-                        <th>Class</th>
-                        <td>{{ $student->class }}</td>
+                        <th>Subject</th>
+                        <td>{{ $grade->subject }}</td>
                     </tr>
                     <tr>
-                        <th>Birth Date</th>
-                        <td>{{ Carbon::parse($student->birth_date)->format('d-m-Y') }}</td>
-                    </tr>
-                    <tr>
-                        <th>Address</th>
-                        <td>{{ $student->address }}</td>
-                    </tr>
-                    <tr>
-                        <th>Phone Number</th>
-                        <td>{{ $student->phone_number }}</td>
+                        <th>Grade</th>
+                        <td>{{ $grade->grade }}</td>
                     </tr>
                 </table>
                 <br>
-                <a href="{{ route('listStudents') }}" class="btn btn-secondary">Back</a>
+                <a href="{{ route('listGrades') }}" class="btn btn-secondary">Back</a>
             </div>
         </div>
     </div>
@@ -64,3 +53,4 @@
 <!-- /.content-wrapper -->
 
 @endsection
+

@@ -11,12 +11,11 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Teacher Details</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ route('home')}}">Home</a></li>
-              <li class="breadcrumb-item"><a href="{{ route('teachers.index') }}">List of Teachers</a></li>
+              <li class="breadcrumb-item"><a href="{{ route('listTeachers') }}">Teachers</a></li>
               <li class="breadcrumb-item active">Teacher Details</li>
             </ol>
           </div><!-- /.col -->
@@ -28,6 +27,7 @@
     <!-- Main content -->
     <div class="content">
         <div class="container mt-5">
+          <h1 class="mt-5">Teacher Details</h1>
             <div class="card bg-white">
                 <div class="card-body">
                       <table class="table table-bordered bg-white">
@@ -49,7 +49,7 @@
                         </tr>
                     </table>
                     <br>
-                    <a href="{{ route('teachers.index') }}" class="btn btn-secondary">Back</a>
+                    <a href="{{ route('listTeachers') }}" class="btn btn-secondary">Back</a>
                 </div>
             </div>
         </div>

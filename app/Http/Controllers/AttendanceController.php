@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Students;
 use App\Models\Attendances;
+use App\Models\Students;
 use Illuminate\Http\Request;
 
 class AttendanceController extends Controller
@@ -13,8 +13,9 @@ class AttendanceController extends Controller
      */
     public function index()
     {
+        $title = "Kelola Kehadiran Siswa";
         $attendances = Attendances::with('student')->get();
-        return view('attendances.index', compact('attendances'));
+        return view('attendances.index', compact('attendances', 'title'));
     }
 
     /**
@@ -22,8 +23,9 @@ class AttendanceController extends Controller
      */
     public function create()
     {
+        $title = "Tambah Kehadiran Siswa";
         $students = Students::all();
-        return view('attendances.create', compact('students'));
+        return view('attendances.create', compact('students', 'title'));
     }
 
     /**
@@ -33,29 +35,31 @@ class AttendanceController extends Controller
     {
         $request->validate([
             'student_id' => 'required|exists:students,id',
-            'attendance_date' => 'required|date',
-            'attendance_status' => 'required|in:present,absent,late',
+            'date' => 'required|date',
+            'status' => 'required|in:Present,Absent,Late,Excused',
         ]);
 
         Attendances::create($request->all());
-        return redirect()->route('attendances.index')->with('success', 'Attendance recorded successfully.');
+        return redirect()->route('listAttendances')->with('success', 'Attendance Recorded Successfully');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Attendances $attendances)
+    public function show(Attendances $attendance)
     {
-        return view('attendances.show', compact('attendance'));
+        $title = "Detail Kehadiran Siswa";
+        return view('attendances.show', compact('attendance', 'title'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Attendances $attendances)
+    public function edit(Attendances $attendance)
     {
+        $title = "Edit Kehadiran Siswa";
         $students = Students::all();
-        return view('attendances.edit', compact('attendance', 'students'));
+        return view('attendances.edit', compact('attendance', 'students', 'title'));
     }
 
     /**
@@ -65,12 +69,12 @@ class AttendanceController extends Controller
     {
         $request->validate([
             'student_id' => 'required|exists:students,id',
-            'attendance_date' => 'required|date',
-            'attendance_status' => 'required|in:present,absent,late',
+            'date' => 'required|date',
+            'status' => 'required|in:Present,Absent,Late,Excused',
         ]);
 
         $attendance->update($request->all());
-        return redirect()->route('attendances.index')->with('success', 'Attendance updated successfully.');
+        return redirect()->route('listAttendances')->with('success', 'Attendance Updated Successfully');
     }
 
     /**
@@ -79,6 +83,6 @@ class AttendanceController extends Controller
     public function destroy(Attendances $attendance)
     {
         $attendance->delete();
-        return redirect()->route('attendances.index')->with('success', 'Attendance deleted successfully.');
+        return redirect()->route('listAttendances')->with('success', 'Attendance deleted successfully');
     }
 }

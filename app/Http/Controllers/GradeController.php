@@ -13,8 +13,9 @@ class GradeController extends Controller
      */
     public function index()
     {
+        $title = "Kelola Nilai Siswa";
         $grades = Grades::with('student')->get();
-        return view('grades.index', compact('grades'));
+        return view('grades.index', compact('grades', 'title'));
     }
 
     /**
@@ -22,8 +23,9 @@ class GradeController extends Controller
      */
     public function create()
     {
+        $title = "Tambah Nilai Siswa";
         $students = Students::all();
-        return view('grades.create', compact('students'));
+        return view('grades.create', compact('students', 'title'));
     }
 
     /**
@@ -31,31 +33,33 @@ class GradeController extends Controller
      */
     public function store(Request $request)
     {
-         $request->validate([
+        $request->validate([
             'student_id' => 'required|exists:students,id',
-            'subject' => 'required',
+            'subject' => 'required|string',
             'grade' => 'required|numeric|between:0,100',
         ]);
 
         Grades::create($request->all());
-        return redirect()->route('grades.index')->with('success', 'Grade recorded successfully.');
+        return redirect()->route('listGrades')->with('success', 'Grade Recorded Successfully');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Grades $grades)
+    public function show(Grades $grade)
     {
-        return view('grades.show', compact('grade'));
+        $title = "Detail Nilai Siswa";
+        return view('grades.show', compact('grade', 'title'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Grades $grades)
+    public function edit(Grades $grade)
     {
+        $title = "Edit Nilai Siswa";
         $students = Students::all();
-        return view('grades.edit', compact('grade', 'students'));
+        return view('grades.edit', compact('grade', 'students', 'title'));
     }
 
     /**
@@ -63,14 +67,14 @@ class GradeController extends Controller
      */
     public function update(Request $request, Grades $grade)
     {
-         $request->validate([
+        $request->validate([
             'student_id' => 'required|exists:students,id',
-            'subject' => 'required',
+            'subject' => 'required|string',
             'grade' => 'required|numeric|between:0,100',
         ]);
 
         $grade->update($request->all());
-        return redirect()->route('grades.index')->with('success', 'Grade updated successfully.');
+        return redirect()->route('listGrades')->with('success', 'Grade Updated Successfully');
     }
 
     /**
@@ -79,6 +83,6 @@ class GradeController extends Controller
     public function destroy(Grades $grade)
     {
         $grade->delete();
-        return redirect()->route('grades.index')->with('success', 'Grade deleted successfully.');
+        return redirect()->route('listGrades')->with('success', 'Grade Deleted Successfully');
     }
 }

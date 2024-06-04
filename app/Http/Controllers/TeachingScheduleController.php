@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Teachers;
-use Illuminate\Http\Request;
 use App\Models\TeachingSchedules;
+use Illuminate\Http\Request;
 
 class TeachingScheduleController extends Controller
 {
@@ -13,8 +13,9 @@ class TeachingScheduleController extends Controller
      */
     public function index()
     {
+        $title = "Kelola Jadwal Guru";
         $teachingSchedules = TeachingSchedules::with('teacher')->get();
-        return view('teaching_schedules.index', compact('teachingSchedules'));
+        return view('teaching_schedules.index', compact('teachingSchedules', 'title'));
     }
 
     /**
@@ -22,8 +23,9 @@ class TeachingScheduleController extends Controller
      */
     public function create()
     {
+        $title = "Tambah Jadwal Guru";
         $teachers = Teachers::all();
-        return view('teaching_schedules.create', compact('teachers'));
+        return view('teaching_schedules.create', compact('teachers', 'title'));
     }
 
     /**
@@ -38,26 +40,35 @@ class TeachingScheduleController extends Controller
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
         ]);
-
-        TeachingSchedules::create($request->all());
-        return redirect()->route('teaching_schedules.index')->with('success', 'Teaching schedule created successfully.');
+    
+        $teachingSchedule = new TeachingSchedules();
+        $teachingSchedule->teacher_id = $request->teacher_id;
+        $teachingSchedule->subject = $request->subject;
+        $teachingSchedule->teaching_day = $request->teaching_day;
+        $teachingSchedule->start_time = $request->start_time;
+        $teachingSchedule->end_time = $request->end_time;
+        $teachingSchedule->save();
+    
+        return redirect()->route('listTeachingschedules')->with('success', 'Teaching Schedule Created Successfully');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(TeachingSchedules $teachingSchedules)
+    public function show(TeachingSchedules $teachingSchedule)
     {
-        return view('teaching_schedules.show', compact('teachingSchedule'));
+        $title = "Detail Jadwal Guru";
+        return view('teaching_schedules.show', compact('teachingSchedule', 'title'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(TeachingSchedules $teachingSchedules)
+    public function edit(TeachingSchedules $teachingSchedule)
     {
+        $title = "Edit Jadwal Guru";
         $teachers = Teachers::all();
-        return view('teaching_schedules.edit', compact('teachingSchedule', 'teachers'));
+        return view('teaching_schedules.edit', compact('teachingSchedule', 'teachers', 'title'));
     }
 
     /**
@@ -67,15 +78,24 @@ class TeachingScheduleController extends Controller
     {
         $request->validate([
             'teacher_id' => 'required|exists:teachers,id',
-            'subject' => 'required',
+            'subject' => 'required|string|max:255',
             'teaching_day' => 'required|in:Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
         ]);
+        
 
-        $teachingSchedule->update($request->all());
-        return redirect()->route('teaching_schedules.index')->with('success', 'Teaching schedule updated successfully.');
+        $teachingSchedule->update([
+            'teacher_id' => $request->teacher_id,
+            'subject' => $request->subject,
+            'teaching_day' => $request->teaching_day,
+            'start_time' => $request->start_time,
+            'end_time' => $request->end_time,
+        ]);
+
+        return redirect()->route('listTeachingschedules')->with('success', 'Teaching Schedule Updated Successfully');
     }
+    
 
     /**
      * Remove the specified resource from storage.
@@ -83,6 +103,6 @@ class TeachingScheduleController extends Controller
     public function destroy(TeachingSchedules $teachingSchedule)
     {
         $teachingSchedule->delete();
-        return redirect()->route('teaching_schedules.index')->with('success', 'Teaching schedule deleted successfully.');
+        return redirect()->route('listTeachingschedules')->with('success', 'Teaching Schedule Deleted Successfully');
     }
 }

@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('attendances', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('student_id')->constrained('students');
-            $table->date('attendance_date');
-            $table->enum('attendance_status', ['present', 'absent', 'late']);
+            $table->foreignId('student_id')->constrained('students')->onDelete('cascade');
+            $table->date('date');
+            $table->enum('status', ['Present', 'Absent', 'Late', 'Excused']);
             $table->timestamps();
         });
     }
@@ -28,3 +28,4 @@ return new class extends Migration
         Schema::dropIfExists('attendances');
     }
 };
+

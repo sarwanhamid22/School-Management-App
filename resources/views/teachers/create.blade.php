@@ -11,12 +11,11 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Add Teacher</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ route('home')}}">Home</a></li>
-              <li class="breadcrumb-item"><a href="{{ route('teachers.index') }}">List of Teachers</a></li>
+              <li class="breadcrumb-item"><a href="{{ route('listTeachers') }}">Teachers</a></li>
               <li class="breadcrumb-item active">Add Teacher</li>
             </ol>
           </div><!-- /.col -->
@@ -28,6 +27,7 @@
     <!-- Main content -->
     <div class="content">
         <div class="container mt-5">
+          <h1 class="mt-5">Add Teacher</h1>
             @if($errors->any())
                 <div class="alert alert-danger">
                     <ul>
@@ -38,7 +38,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('teachers.store') }}" method="POST">
+            <form action="{{ route('storeTeachers') }}" method="POST">
                 @csrf
                 <div class="form-group">
                     <label for="name">Name</label>
@@ -57,7 +57,7 @@
                     <input type="email" name="email" id="email" class="form-control" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Add</button>
-                <a href="{{ route('teachers.index') }}" class="btn btn-secondary">Back</a>
+                <a href="{{ route('listTeachers') }}" class="btn btn-secondary">Back</a>
             </form>
         </div>
     </div>

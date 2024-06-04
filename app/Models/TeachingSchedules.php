@@ -16,4 +16,9 @@ class TeachingSchedules extends Model
         'start_time',
         'end_time',
     ];
+
+    public function teacher()
+    {
+        return $this->belongsTo(Teachers::class);
+    }
 }

@@ -4,15 +4,6 @@
 @section('title', 'Edit Student')
 
 @section('content')
-@if($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -20,11 +11,11 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Edit Student</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{ route('home')}}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('listStudents') }}">Students</a></li>
                         <li class="breadcrumb-item active">Edit Student</li>
                     </ol>
                 </div><!-- /.col -->
@@ -36,7 +27,8 @@
     <!-- Main content -->
     <div class="content">
         <div class="container mt-5">
-            <form action="{{ route('students.update', $student) }}" method="POST">
+            <h1 class="mt-5">Edit Student</h1>
+            <form action="{{ route('updateStudents', $student) }}" method="POST">
                 @csrf
                 @method('PUT')
                 <div class="form-group">
@@ -60,7 +52,7 @@
                     <input type="text" name="phone_number" id="phone_number" class="form-control" value="{{ $student->phone_number }}" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Update</button>
-                <a href="{{ route('students.index') }}" class="btn btn-secondary">Back</a>
+                <a href="{{ route('listStudents') }}" class="btn btn-secondary">Back</a>
             </form>
         </div>
     </div>

@@ -11,11 +11,11 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Edit Teacher</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{ route('home')}}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('listTeachers') }}">Teachers</a></li>
                         <li class="breadcrumb-item active">Edit Teacher</li>
                     </ol>
                 </div><!-- /.col -->
@@ -27,17 +27,8 @@
     <!-- Main content -->
     <div class="content">
         <div class="container mt-5">
-            @if($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
-            <form action="{{ route('teachers.update', $teacher) }}" method="POST">
+            <h1 class="mt-5">Edit Teacher</h1>
+            <form action="{{ route('updateTeachers', $teacher) }}" method="POST">
                 @csrf
                 @method('PUT')
                 <div class="form-group">
@@ -57,7 +48,7 @@
                     <input type="email" name="email" id="email" class="form-control" value="{{ $teacher->email }}" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Update</button>
-                <a href="{{ route('teachers.index') }}" class="btn btn-secondary">Back</a>
+                <a href="{{ route('listTeachers') }}" class="btn btn-secondary">Back</a>
             </form>
         </div>
     </div>

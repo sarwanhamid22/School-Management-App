@@ -1,5 +1,7 @@
-<!-- resources/views/students/index.blade.php -->
+<!-- resources/views/teaching_schedules/index.blade.php -->
 @extends('layouts.master')
+
+@section('title', 'Teaching Schedules')
 @php
     use Carbon\Carbon;
 @endphp
@@ -38,68 +40,64 @@
     </script>    
 @endsection
 
-@section('title', 'Students')
-
 @section('content')
-<!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
     <div class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-          </div><!-- /.col -->
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="{{ route('home')}}">Home</a></li>
-              <li class="breadcrumb-item active">Students</li>
-            </ol>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+                        <li class="breadcrumb-item active">Teaching Schedules</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
 
     <!-- Main content -->
     <div class="content">
-         <div class="container mt-5">
+        <div class="container mt-5">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h1>Students SMK Gamelab</h1>
-                <a href="{{ route('createStudents') }}" class="btn btn-primary">Add Student</a>
+                <h1>Teaching Schedules SMK Gamelab</h1>
+                <a href="{{ route('createTeachingschedules') }}" class="btn btn-primary">Add Teaching Schedule</a>
             </div>
-        
+            
             <div class="card">
                 <div class="card-body">
                     <table class="table table-hover mb-0" id="data-table">
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Name</th>
-                                <th>Class</th>
-                                <th>Birth Date</th>
-                                <th>Address</th>
-                                <th>Phone Number</th>
+                                <th>Teacher</th>
+                                <th>Subject</th>
+                                <th>Day</th>
+                                <th>Start Time</th>
+                                <th>End Time</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($students as $student)
+                            @foreach($teachingSchedules as $schedule)
                                 <tr>
                                     <td> {{ $loop->index + 1}}</td>
-                                    <td>{{ $student->name }}</td>
-                                    <td>{{ $student->class }}</td>
-                                    <td>{{ Carbon::parse($student->birth_date)->format('d-m-Y') }}</td>
-                                    <td>{{ $student->address }}</td>
-                                    <td>{{ $student->phone_number }}</td>
+                                    <td>{{ $schedule->teacher->name }}</td>
+                                    <td>{{ $schedule->subject }}</td>
+                                    <td>{{ $schedule->teaching_day }}</td>
+                                    <td>{{ Carbon::parse($schedule->start_time)->format('H:i') }}</td>
+                                    <td>{{ Carbon::parse($schedule->end_time)->format('H:i') }}</td>
                                     <td>
-                                        <a href="{{ route('showStudents', $student) }}" class="btn btn-info btn-sm">View</a>
-                                        <a href="{{ route('editStudents', $student) }}" class="btn btn-warning btn-sm">Edit</a>
-                                        <a href="#" onclick="confirmDelete(this)" data-url="{{ route('deleteStudents', ['student' => $student->id]) }}" class="btn btn-danger btn-sm">Delete</a>
+                                        <a href="{{ route('showTeachingschedules', $schedule) }}" class="btn btn-info btn-sm">View</a>
+                                        <a href="{{ route('editTeachingschedules', $schedule) }}" class="btn btn-warning btn-sm">Edit</a>
+                                        <a href="#" onclick="confirmDelete(this)" data-url="{{ route('deleteTeachingschedules', ['teaching_schedule' => $schedule->teacher->id]) }}" class="btn btn-danger btn-sm">Delete</a>
                                         <!-- Form Delete -->
                                         <form id="delete-form" method="POST" style="display: none;">
                                             @csrf
                                             @method('DELETE')
-                                        </form>
+                                    </form>                 
                                     </td>
                                 </tr>
                             @endforeach

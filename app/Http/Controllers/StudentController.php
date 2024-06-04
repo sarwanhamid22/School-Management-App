@@ -12,8 +12,9 @@ class StudentController extends Controller
      */
     public function index()
     {
+        $title = "Kelola Profil Siswa";
         $students = Students::all();
-        return view('students.index', compact('students'));
+        return view('students.index', compact('students', 'title'));
     }
 
     /**
@@ -21,7 +22,8 @@ class StudentController extends Controller
      */
     public function create()
     {
-        return view('students.create');
+        $title = "Tambah Profil Siswa";
+        return view('students.create', compact('title'));
     }
 
     /**
@@ -38,7 +40,7 @@ class StudentController extends Controller
         ]);
 
         Students::create($request->all());
-        return redirect()->route('students.index')->with('success', 'Student created successfully.');
+        return redirect()->route('listStudents')->with('success', 'Student Created Successfully');
     }
 
     /**
@@ -46,7 +48,8 @@ class StudentController extends Controller
      */
     public function show(Students $student)
     {
-        return view('students.show', compact('student'));
+        $title = "Detail Profil Siswa";
+        return view('students.show', compact('student', 'title'));
     }
 
     /**
@@ -54,7 +57,8 @@ class StudentController extends Controller
      */
     public function edit(Students $student)
     {
-        return view('students.edit', compact('student'));
+        $title = "Edit Profil Siswa";
+        return view('students.edit', compact('student', 'title'));
     }
 
     /**
@@ -71,7 +75,7 @@ class StudentController extends Controller
         ]);
 
         $student->update($request->all());
-        return redirect()->route('students.index')->with('success', 'Student updated successfully.');
+        return redirect()->route('listStudents')->with('success', 'Student Updated Successfully');
     }
 
     /**
@@ -80,6 +84,6 @@ class StudentController extends Controller
     public function destroy(Students $student)
     {
         $student->delete();
-        return redirect()->route('students.index')->with('success', 'Student deleted successfully.');
+        return redirect()->route('listStudents')->with('success', 'Student Deleted Successfully');
     }
 }

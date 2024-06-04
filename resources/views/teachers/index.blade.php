@@ -3,6 +3,40 @@
 
 @section('title', 'Teachers')
 
+@section('addCss')
+<link rel="stylesheet" href="{{ asset('css/dataTables.bootstrap4.min.css') }}">
+@endsection
+@section('addJavascript')
+    <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('js/dataTables.bootstrap4.min.js') }}"></script>
+    {{-- Script tambahan inisialisasi datatables --}}
+    <script>
+    $(function() {
+        $("#data-table").DataTable();
+    })
+    </script>
+    <script src="{{ asset('js/sweetalert.min.js') }}"></script>
+    <script>
+        function confirmDelete(button) {
+            var url = $(button).data('url');
+            swal({
+                title: 'Konfirmasi Hapus',
+                text: 'Apakah Kamu Yakin Ingin Menghapus Data Ini?',
+                icon: 'warning',
+                buttons: true,
+                dangerMode: true,
+            }).then(function(value) {
+                if (value) {
+                    // Set form action to the delete URL
+                    var form = $('#delete-form');
+                    form.attr('action', url);
+                    form.submit();
+                }
+            });
+        }
+    </script>    
+@endsection
+
 @section('content')
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -11,12 +45,11 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">List of Teachers</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="{{ route('home')}}">Home</a></li>
-              <li class="breadcrumb-item active">List of Teachers</li>
+              <li class="breadcrumb-item active">Teachers</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -29,18 +62,15 @@
          <div class="container mt-5">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h1>Teachers SMK Gamelab</h1>
-                <a href="{{ route('teachers.create') }}" class="btn btn-primary">Add Teacher</a>
+                <a href="{{ route('createTeachers') }}" class="btn btn-primary">Add Teacher</a>
             </div>
-        
-            @if(session('success'))
-                <div class="alert alert-success">{{ session('success') }}</div>
-            @endif
         
             <div class="card">
                 <div class="card-body">
-                <table class="table table-bordered bg-white">
-                    <thead class="thead-light">
+                  <table class="table table-hover mb-0" id="data-table">
+                    <thead>
                         <tr>
+                            <th>No</th>
                             <th>Name</th>
                             <th>Specialization</th>
                             <th>Phone Number</th>
@@ -51,18 +81,20 @@
                     <tbody>
                         @foreach($teachers as $teacher)
                             <tr>
+                                <td> {{ $loop->index + 1}}</td>
                                 <td>{{ $teacher->name }}</td>
                                 <td>{{ $teacher->specialization }}</td>
                                 <td>{{ $teacher->phone_number }}</td>
                                 <td>{{ $teacher->email }}</td>
                                 <td>
-                                    <a href="{{ route('teachers.show', $teacher) }}" class="btn btn-info btn-sm">View</a>
-                                    <a href="{{ route('teachers.edit', $teacher) }}" class="btn btn-warning btn-sm">Edit</a>
-                                    <form action="{{ route('teachers.destroy', $teacher) }}" method="POST" class="d-inline">
+                                    <a href="{{ route('showTeachers', $teacher) }}" class="btn btn-info btn-sm">View</a>
+                                    <a href="{{ route('editTeachers', $teacher) }}" class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="#" onclick="confirmDelete(this)" data-url="{{ route('deleteTeachers', ['teacher' => $teacher->id]) }}" class="btn btn-danger btn-sm">Delete</a>
+                                    <!-- Form Delete -->
+                                    <form id="delete-form" method="POST" style="display: none;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                    </form>
+                                    </form>                         
                                 </td>
                             </tr>
                         @endforeach

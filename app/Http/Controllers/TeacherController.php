@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Teachers;
+use App\Models\TeachingSchedules;
 use Illuminate\Http\Request;
 
 class TeacherController extends Controller
@@ -12,8 +13,9 @@ class TeacherController extends Controller
      */
     public function index()
     {
+        $title = "Kelola Profil Guru";
         $teachers = Teachers::all();
-        return view('teachers.index', compact('teachers'));
+        return view('teachers.index', compact('teachers', 'title'));
     }
 
     /**
@@ -21,7 +23,8 @@ class TeacherController extends Controller
      */
     public function create()
     {
-        return view('teachers.create');
+        $title = "Tambah Profil Guru";
+        return view('teachers.create', compact('title'));
     }
 
     /**
@@ -37,7 +40,7 @@ class TeacherController extends Controller
         ]);
 
         Teachers::create($request->all());
-        return redirect()->route('teachers.index')->with('success', 'Teacher created successfully.');
+        return redirect()->route('listTeachers')->with('success', 'Teacher Created Successfully');
     }
 
     /**
@@ -45,7 +48,8 @@ class TeacherController extends Controller
      */
     public function show(Teachers $teacher)
     {
-        return view('teachers.show', compact('teacher'));
+        $title = "Detail Profil Guru";
+        return view('teachers.show', compact('teacher', 'title'));
     }
 
     /**
@@ -53,7 +57,8 @@ class TeacherController extends Controller
      */
     public function edit(Teachers $teacher)
     {
-        return view('teachers.edit', compact('teacher'));
+        $title = "Edit Profil Guru";
+        return view('teachers.edit', compact('teacher', 'title'));
     }
 
     /**
@@ -69,7 +74,7 @@ class TeacherController extends Controller
         ]);
 
         $teacher->update($request->all());
-        return redirect()->route('teachers.index')->with('success', 'Teacher updated successfully.');
+        return redirect()->route('listTeachers')->with('success', 'Teacher Updated Successfully');
     }
 
     /**
@@ -77,7 +82,9 @@ class TeacherController extends Controller
      */
     public function destroy(Teachers $teacher)
     {
+         // Delete related teaching schedules
+        TeachingSchedules::where('teacher_id', $teacher->id)->delete();
         $teacher->delete();
-        return redirect()->route('teachers.index')->with('success', 'Teacher deleted successfully.');
+        return redirect()->route('listTeachers')->with('success', 'Teacher Deleted Successfully');
     }
 }

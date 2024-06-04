@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Students;
 
 class Grades extends Model
 {
@@ -14,4 +15,9 @@ class Grades extends Model
         'subject',
         'grade',
     ];
+
+    public function student()
+    {
+        return $this->belongsTo(Students::class);
+    }
 }
