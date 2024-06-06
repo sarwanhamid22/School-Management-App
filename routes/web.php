@@ -35,6 +35,8 @@ Route::get('/students/{student}', [StudentController::class, 'show'])->name('sho
 Route::get('/students/{student}/edit', [StudentController::class, 'edit'])->name('editStudents');
 Route::put('/students/{student}', [StudentController::class, 'update'])->name('updateStudents');
 Route::delete('/students/{student}/delete', [StudentController::class, 'destroy'])->name('deleteStudents');
+Route::post('/students/import', [StudentController::class, 'import'])->name('importStudents');
+
 
 // Teacher Routes
 Route::get('/teachers', [TeacherController::class, 'index'])->name('listTeachers');
@@ -53,6 +55,7 @@ Route::get('/attendances/{attendance}', [AttendanceController::class, 'show'])->
 Route::get('/attendances/{attendance}/edit', [AttendanceController::class, 'edit'])->name('editAttendances');
 Route::put('/attendances/{attendance}', [AttendanceController::class, 'update'])->name('updateAttendances');
 Route::delete('/attendances/{attendance}/delete', [AttendanceController::class, 'destroy'])->name('deleteAttendances');
+Route::post('/attendances/import', [AttendanceController::class, 'import'])->name('importAttendances');
 
 // Grade Routes
 Route::get('/grades', [GradeController::class, 'index'])->name('listGrades');

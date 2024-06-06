@@ -62,12 +62,41 @@
 
     <!-- Main content -->
     <div class="content">
-         <div class="container mt-5">
+        <div class="container mt-5">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h1>Students SMK Gamelab</h1>
-                <a href="{{ route('createStudents') }}" class="btn btn-primary">Add Student</a>
+                <div>
+                    <button class="btn btn-primary mr-2" data-toggle="modal" data-target="#importModal">Import Excel</button>
+                    <a href="{{ route('createStudents') }}" class="btn btn-primary">Add Student</a>
+                </div>
             </div>
         
+            <!-- Import Modal -->
+            <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="importModalLabel">Import Students Excel File</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form action="{{ route('importStudents') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="excel_file">Choose Excel File</label>
+                                    <input type="file" name="excel_file" id="excel_file" accept=".xlsx, .xls" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Import</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
             <div class="card">
                 <div class="card-body">
                     <table class="table table-hover mb-0" id="data-table">

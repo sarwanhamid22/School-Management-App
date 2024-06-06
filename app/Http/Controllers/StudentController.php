@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Students;
 use Illuminate\Http\Request;
+use App\Imports\StudentsImport;
+use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 
 class StudentController extends Controller
 {
@@ -86,4 +89,22 @@ class StudentController extends Controller
         $student->delete();
         return redirect()->route('listStudents')->with('success', 'Student Deleted Successfully');
     }
+
+    public function import(Request $request)
+    {
+        $file = $request->file('excel_file');
+
+        try {
+            Excel::import(new StudentsImport, $file);
+            return redirect()->route('listStudents')->with('success', 'Data berhasil diimpor.');
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            Log::error('Import Error: ' . $e->getMessage());
+            Log::error('File Path: ' . $file->getPathname());
+            return redirect()->route('listStudents')->with('error', 'Terjadi kesalahan saat mengimpor data.');
+        }
+    }
+
+
+
 }
