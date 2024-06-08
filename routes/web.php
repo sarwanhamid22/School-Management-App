@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GradeController;
 use App\Http\Controllers\StudentController;
@@ -47,6 +48,7 @@ Route::get('/teachers/{teacher}/edit', [TeacherController::class, 'edit'])->name
 Route::put('/teachers/{teacher}', [TeacherController::class, 'update'])->name('updateTeachers');
 Route::delete('/teachers/{teacher}/delete', [TeacherController::class, 'destroy'])->name('deleteTeachers');
 
+<<<<<<< Updated upstream
 // Attendance Routes
 Route::get('/attendances', [AttendanceController::class, 'index'])->name('listAttendances');
 Route::get('/attendances/create', [AttendanceController::class, 'create'])->name('createAttendances');
@@ -74,3 +76,21 @@ Route::get('/teaching_schedules/{teaching_schedule}', [TeachingScheduleControlle
 Route::get('/teaching_schedules/{teaching_schedule}/edit', [TeachingScheduleController::class, 'edit'])->name('editTeachingschedules');
 Route::put('/teaching_schedules/{teaching_schedule}', [TeachingScheduleController::class, 'update'])->name('updateTeachingschedules');
 Route::delete('/teaching_schedules/{teaching_schedule}/delete', [TeachingScheduleController::class, 'destroy'])->name('deleteTeachingschedules');
+=======
+// Payment Routes
+Route::get('payments/trashed', [PaymentController::class, 'trashed'])->name('payments.trashed');
+Route::get('/payments/search', 'PaymentController@search')->name('payments.search');
+
+Route::post('payments/{id}/restore', [PaymentController::class, 'restore'])->name('payments.restore');
+Route::delete('payments/{id}/force-delete', [PaymentController::class, 'forceDelete'])->name('payments.forceDelete');
+Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index');
+Route::get('/payments/create', [PaymentController::class, 'create'])->name('payments.create');
+Route::post('/payments', [PaymentController::class, 'store'])->name('payments.store');
+Route::get('/payments/{id}', [PaymentController::class, 'show'])->name('payments.show');
+Route::get('/payments/print/{id}', [PaymentController::class, 'print'])->name('payments.print');
+Route::delete('/payments/{id}', [PaymentController::class, 'destroy'])->name('payments.destroy');
+Route::get('/payments/{id}/edit', [PaymentController::class, 'edit'])->name('payments.edit');
+Route::put('/payments/{id}', [PaymentController::class, 'update'])->name('payments.update');
+
+
+>>>>>>> Stashed changes
