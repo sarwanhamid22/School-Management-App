@@ -35,6 +35,7 @@ class PaymentController extends Controller
     {
         $validated = $request->validate([
             'student_id' => 'required|exists:students,id',
+            'class'=> 'required|exists:students,id',
             'academic_year' => 'required|string',
             'payment_type' => 'required|array',
             'amount' => 'required|numeric',
@@ -75,6 +76,7 @@ class PaymentController extends Controller
     {
         $validated = $request->validate([
             'student_id' => 'required|exists:students,id',
+            'class'=> 'required|exists:students,id',
             'academic_year' => 'required|string',
             'payment_type' => 'required|array',
             'amount' => 'required|numeric',

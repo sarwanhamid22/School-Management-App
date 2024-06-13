@@ -36,7 +36,7 @@
                     <form action="{{ route('payments.store') }}" method="POST">
                         @csrf
                         <div class="row mb-3">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="student_id" class="form-label">Nama Siswa <span class="text-danger">*</span></label>
                                     <select class="form-control" id="student_id" name="student_id" required>
@@ -47,7 +47,18 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="class" class="form-label">Kelas <span class="text-danger">*</span></label>
+                                    <select class="form-control" id="class" name="class" required>
+                                        <option selected disabled>Pilih Kelas Siswa</option>
+                                        @foreach($students as $student)
+                                            <option value="{{ $student->id }}">{{ $student->class }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="academic_year" class="form-label">Tahun Ajaran <span class="text-danger">*</span></label>
                                     <select class="form-control" id="academic_year" name="academic_year" required>

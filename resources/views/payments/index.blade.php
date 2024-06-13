@@ -1,5 +1,40 @@
 @extends('layouts.master')
 
+@section('addCss')
+<link rel="stylesheet" href="{{ asset('css/dataTables.bootstrap4.min.css') }}">
+@endsection
+
+@section('addJavascript')
+<script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('js/dataTables.bootstrap4.min.js') }}"></script>
+<script src="{{ asset('js/sweetalert.min.js') }}"></script>
+<script>
+  $(function() {
+    $("#data-table").DataTable();
+  });
+  function confirmDelete(event, form) {
+    event.preventDefault();
+    var studentName = $(form).data('student-name');
+    swal({
+        title: 'Konfirmasi Hapus',
+        content: {
+            element: "span",
+            attributes: {
+                innerHTML: 'Apakah kamu yakin ingin menghapus data pembayaran siswa <strong>' + studentName + '</strong>?'
+            },
+        },
+        icon: 'warning',
+        dangerMode: true,
+        buttons: true
+    }).then(function(value) {
+        if (value) {
+            form.submit();
+        }
+    });
+}
+</script>
+@endsection
+
 @section('content')
 <div class="content-wrapper">
     <div class="content-header">
@@ -39,8 +74,9 @@
                       <table class="table table-bordered table-striped" id="data-table">
                           <thead>
                               <tr>
-                                  <th>ID</th>
+                                  <th>No</th>
                                   <th>Nama Siswa</th>
+                                  <th>Kelas</th>
                                   <th>Tahun Akademik</th>
                                   <th>Jenis Pembayaran</th>
                                   <th>Jumlah</th>
@@ -51,15 +87,16 @@
                               </tr>
                           </thead>
                           <tbody>
-                            @foreach ($payments as $payment)
+                            @foreach ($payments as $index => $payment)
                             <tr>
-                                <td>{{ $payment->id }}</td>
+                                <td>{{ $index + 1 }}</td>
                                 <td>{{ $payment->student->name }}</td>
+                                <td>{{ $payment->student->class }}</td>
                                 <td>{{ $payment->academic_year }}</td>
                                 <td>{{ implode(', ', $payment->payment_type) }}</td>
                                 <td>Rp {{ number_format($payment->amount, 0, ',', '.') }}</td>
                                 <td>{{ $payment->payment_date->format('d-m-Y') }}</td>
-                                <td>{{ $payment->description }}</td>
+                                <td>{{ $payment->description ?? '' }}</td> <!-- Menampilkan deskripsi, jika kosong maka nilai kosong akan ditampilkan -->
                                 <td>{{ $payment->status ? 'Lunas' : 'Belum Lunas' }}</td>
                                 <td>
                                   <div class="d-flex justify-content-around">
@@ -69,13 +106,14 @@
                                       <a href="{{ route('payments.edit', $payment->id) }}" class="btn btn-warning btn-sm mx-1">
                                           <i class="fas fa-edit"></i>
                                       </a>
-                                      <form action="{{ route('payments.destroy', $payment->id) }}" method="POST" class="mx-1">
-                                          @csrf
-                                          @method('DELETE')
-                                          <button type="submit" class="btn btn-danger btn-sm">
-                                              <i class="fas fa-trash-alt"></i>
-                                          </button>
-                                      </form>
+                                      <form onsubmit="confirmDelete(event, this)" data-student-name="{{ $payment->student->name }}" method="POST" action="{{ route('payments.destroy', $payment->id) }}" class="mx-1">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                    
                                   </div>
                                 </td>
                             </tr>

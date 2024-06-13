@@ -20,6 +20,8 @@ return new class extends Migration
             $table->date('payment_date');
             $table->boolean('status');
             $table->text('description')->nullable();
+            $table->string('class'); // Add this line to include the class column
+            $table->softDeletes(); // Add this line to include soft deletes
             $table->timestamps();
         });
     }

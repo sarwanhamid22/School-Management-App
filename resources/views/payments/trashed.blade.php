@@ -34,6 +34,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Nama Siswa</th>
+                                    <th>Kelas</th>
                                     <th>Tahun Akademik</th>
                                     <th>Jenis Pembayaran</th>
                                     <th>Jumlah</th>
@@ -48,6 +49,7 @@
                                 <tr>
                                     <td>{{ $payment->id }}</td>
                                     <td>{{ $payment->student->name }}</td>
+                                    <td>{{ $payment->student->class }}</td>
                                     <td>{{ $payment->academic_year }}</td>
                                     <td>{{ implode(', ', $payment->payment_type) }}</td>
                                     <td>Rp {{ number_format($payment->amount, 0, ',', '.') }}</td>

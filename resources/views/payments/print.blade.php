@@ -50,6 +50,10 @@
                 <td>{{ $payment->student->name }}</td>
             </tr>
             <tr>
+                <th>Kelas Siswa:</th>
+                <td>{{ $payment->student->class }}</td>
+            </tr>
+            <tr>
                 <th>Tahun Akademik:</th>
                 <td>{{ $payment->academic_year }}</td>
             </tr>

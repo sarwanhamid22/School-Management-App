@@ -36,7 +36,7 @@
                         @csrf
                         @method('PUT')
                         <div class="row mb-3">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="student_id" class="form-label">Nama Siswa</label>
                                     <select class="form-control" id="student_id" name="student_id">
@@ -46,7 +46,17 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="class" class="form-label">Kelas</label>
+                                    <select class="form-control" id="class" name="class">
+                                        @foreach($students as $student)
+                                            <option value="{{ $student->id }}" {{ $student->id == $payment->student_id ? 'selected' : '' }}>{{ $student->class }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="academic_year" class="form-label">Tahun Ajaran</label>
                                     <select class="form-control" id="academic_year" name="academic_year">

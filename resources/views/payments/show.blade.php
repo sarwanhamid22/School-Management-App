@@ -36,6 +36,10 @@
                                     <td>{{ $payment->student->name }}</td>
                                 </tr>
                                 <tr>
+                                    <th style="width:50%">kelas Siswa:</th>
+                                    <td>{{ $payment->student->class }}</td>
+                                </tr>
+                                <tr>
                                     <th>Tahun Akademik:</th>
                                     <td>{{ $payment->academic_year }}</td>
                                 </tr>

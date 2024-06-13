@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FinancialReportController;
 use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StudentController;
@@ -45,8 +46,6 @@ Route::delete('/teachers/{teacher}', [TeacherController::class, 'destroy'])->nam
 
 // Payment Routes
 Route::get('payments/trashed', [PaymentController::class, 'trashed'])->name('payments.trashed');
-Route::get('/payments/search', 'PaymentController@search')->name('payments.search');
-
 Route::post('payments/{id}/restore', [PaymentController::class, 'restore'])->name('payments.restore');
 Route::delete('payments/{id}/force-delete', [PaymentController::class, 'forceDelete'])->name('payments.forceDelete');
 Route::get('/payments', [PaymentController::class, 'index'])->name('payments.index');
@@ -57,5 +56,18 @@ Route::get('/payments/print/{id}', [PaymentController::class, 'print'])->name('p
 Route::delete('/payments/{id}', [PaymentController::class, 'destroy'])->name('payments.destroy');
 Route::get('/payments/{id}/edit', [PaymentController::class, 'edit'])->name('payments.edit');
 Route::put('/payments/{id}', [PaymentController::class, 'update'])->name('payments.update');
+
+// financialreport Routes
+Route::get('/reports', [FinancialReportController::class, 'index'])->name('financial-reports.index');
+Route::get('/reports/create', [FinancialReportController::class, 'create'])->name('financial-reports.create');
+Route::post('/reports', [FinancialReportController::class, 'store'])->name('financial-reports.store');
+Route::get('/reports/{id}', [FinancialReportController::class, 'show'])->name('financial-reports.show');
+Route::delete('/reports/{id}', [FinancialReportController::class, 'destroy'])->name('financial-reports.destroy');
+Route::get('/reports/{id}/edit', [FinancialReportController::class, 'edit'])->name('financial-reports.edit');
+Route::put('/reports/{id}', [FinancialReportController::class, 'update'])->name('financial-reports.update');
+Route::get('/financial-reports/print', [FinancialReportController::class, 'print'])->name('financial-reports.print');
+Route::post('/financial-reports/print', [FinancialReportController::class, 'printReports'])->name('financial-reports.printReports');
+Route::post('/financial-reports/print-pdf', [FinancialReportController::class, 'printPdf'])->name('financial-reports.printPdf');
+
 
 

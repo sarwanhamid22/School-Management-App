@@ -12,7 +12,7 @@ class Payments extends Model
 
   
     protected $fillable = [
-        'student_id', 'academic_year', 'payment_type', 'amount', 'payment_date', 'status', 'description',
+        'student_id', 'academic_year', 'payment_type', 'amount', 'payment_date', 'status', 'description','class',
     ];
 
     protected $casts = [

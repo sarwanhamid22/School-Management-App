@@ -224,13 +224,13 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <p>Contoh 1</p>
+                <a href="{{route('payments.index')}}" class="nav-link">
+                  <p>Tracking Pembayaran</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <p>Contoh 2</p>
+                <a href="{{route('financial-reports.index')}}" class="nav-link">
+                  <p>Laporan keuangan</p>
                 </a>
               </li>
             </ul>
