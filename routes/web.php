@@ -1,15 +1,13 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\GradeController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
-use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\TeachingScheduleController;
-use App\Http\Controllers\EventController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\Auth\StudentLoginController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,53 +17,33 @@ use Illuminate\Support\Facades\Route;
 |
 | Here is where you can register web routes for your application. These
 | routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Let's make something great!
+| be assigned to the "web" middleware group. Make something great!
 |
 */
 
-Route::get('login', function () {
-    return view('login');
+Route::get('/', function () {
+    return view('landingpage');
 });
 
-Route::middleware('auth:student')->group(function () {
-    // Route untuk form login siswa
-    Route::get('student/login', [StudentLoginController::class, 'showLoginForm'])->name('student.login');
-    Route::post('student/login', [StudentLoginController::class, 'login'])->name('student.login.submit');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-    // Route untuk Komunikasi
-    Route::get('/', 'MessagesController@index')->name(config('chatify.routes.prefix'));
-    Route::post('/idInfo', 'MessagesController@idFetchData');
-    Route::post('/sendMessage', 'MessagesController@send')->name('send.message');
-    Route::post('/fetchMessages', 'MessagesController@fetch')->name('fetch.messages');
-    Route::get('/download/{fileName}', 'MessagesController@download')->name(config('chatify.attachments.download_route_name'));
-    Route::post('/chat/auth', 'MessagesController@pusherAuth')->name('pusher.auth');
-    Route::post('/makeSeen', 'MessagesController@seen')->name('messages.seen');
-    Route::get('/getContacts', 'MessagesController@getContacts')->name('contacts.get');
-    Route::post('/updateContacts', 'MessagesController@updateContactItem')->name('contacts.update');
-    Route::post('/star', 'MessagesController@favorite')->name('star');
-    Route::post('/favorites', 'MessagesController@getFavorites')->name('favorites');
-    Route::get('/search', 'MessagesController@search')->name('search');
-    Route::post('/shared', 'MessagesController@sharedPhotos')->name('shared');
-    Route::post('/deleteConversation', 'MessagesController@deleteConversation')->name('conversation.delete');
-    Route::post('/deleteMessage', 'MessagesController@deleteMessage')->name('message.delete');
-    Route::post('/updateSettings', 'MessagesController@updateSettings')->name('avatar.update');
-    Route::post('/setActiveStatus', 'MessagesController@setActiveStatus')->name('activeStatus.set');
-    Route::get('/group/{id}', 'MessagesController@index')->name('group');
-    Route::get('/{id}', 'MessagesController@index')->name('user');
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
+Route::get('/home', [HomeController::class, 'index']);
 
-    // Route untuk dashboard 
-    Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
-    Route::post('/notification/store', [HomeController::class, 'storeNotification'])->name('store.notification');
-    Route::delete('/notification/{id}', [HomeController::class, 'deleteNotification'])->name('delete.notification');
-    Route::post('/events', [EventController::class, 'store'])->name('events.store');
-    Route::get('/events', [EventController::class, 'fetchEvents'])->name('events.fetch');
-    Route::delete('/events/delete-all', [EventController::class, 'deleteAllEvents'])->name('events.delete.all');
+Route::middleware(['auth', 'admin'])->group(function () {
 
-    // Route untuk siswa setelah login
-    // Route::get('student/dashboard', [HomeController::class, 'index'])->name('student.dashboard');
+    //report routes
 
-    // Route untuk manajemen siswa
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+
+    // Student Routes
     Route::get('/students', [StudentController::class, 'index'])->name('listStudents');
     Route::get('/students/create', [StudentController::class, 'create'])->name('createStudents');
     Route::post('/students', [StudentController::class, 'store'])->name('storeStudents');
@@ -73,9 +51,10 @@ Route::middleware('auth:student')->group(function () {
     Route::get('/students/{student}/edit', [StudentController::class, 'edit'])->name('editStudents');
     Route::put('/students/{student}', [StudentController::class, 'update'])->name('updateStudents');
     Route::delete('/students/{student}/delete', [StudentController::class, 'destroy'])->name('deleteStudents');
-    Route::post('/students/importStudents', [StudentController::class, 'importStudents'])->name('importStudents');
+    Route::post('/students/import', [StudentController::class, 'import'])->name('importStudents');
 
-    // Route untuk manajemen guru
+
+    // Teacher Routes
     Route::get('/teachers', [TeacherController::class, 'index'])->name('listTeachers');
     Route::get('/teachers/create', [TeacherController::class, 'create'])->name('createTeachers');
     Route::post('/teachers', [TeacherController::class, 'store'])->name('storeTeachers');
@@ -83,9 +62,8 @@ Route::middleware('auth:student')->group(function () {
     Route::get('/teachers/{teacher}/edit', [TeacherController::class, 'edit'])->name('editTeachers');
     Route::put('/teachers/{teacher}', [TeacherController::class, 'update'])->name('updateTeachers');
     Route::delete('/teachers/{teacher}/delete', [TeacherController::class, 'destroy'])->name('deleteTeachers');
-    Route::post('/teachers/importTeachers', [TeacherController::class, 'importTeachers'])->name('importTeachers');
 
-    // Route untuk manajemen kehadiran
+    // Attendance Routes
     Route::get('/attendances', [AttendanceController::class, 'index'])->name('listAttendances');
     Route::get('/attendances/create', [AttendanceController::class, 'create'])->name('createAttendances');
     Route::post('/attendances', [AttendanceController::class, 'store'])->name('storeAttendances');
@@ -93,8 +71,10 @@ Route::middleware('auth:student')->group(function () {
     Route::get('/attendances/{attendance}/edit', [AttendanceController::class, 'edit'])->name('editAttendances');
     Route::put('/attendances/{attendance}', [AttendanceController::class, 'update'])->name('updateAttendances');
     Route::delete('/attendances/{attendance}/delete', [AttendanceController::class, 'destroy'])->name('deleteAttendances');
+    Route::post('/attendances/import', [AttendanceController::class, 'import'])->name('importAttendances');
 
-    // Route untuk manajemen nilai
+
+    // Grade Routes
     Route::get('/grades', [GradeController::class, 'index'])->name('listGrades');
     Route::get('/grades/create', [GradeController::class, 'create'])->name('createGrades');
     Route::post('/grades', [GradeController::class, 'store'])->name('storeGrades');
@@ -103,7 +83,7 @@ Route::middleware('auth:student')->group(function () {
     Route::put('/grades/{grade}', [GradeController::class, 'update'])->name('updateGrades');
     Route::delete('/grades/{grade}/delete', [GradeController::class, 'destroy'])->name('deleteGrades');
 
-    // Route untuk jadwal mengajar
+    // Teaching Schedule Routes
     Route::get('/teaching_schedules', [TeachingScheduleController::class, 'index'])->name('listTeachingschedules');
     Route::get('/teaching_schedules/create', [TeachingScheduleController::class, 'create'])->name('createTeachingschedules');
     Route::post('/teaching_schedules', [TeachingScheduleController::class, 'store'])->name('storeTeachingschedules');
@@ -112,15 +92,62 @@ Route::middleware('auth:student')->group(function () {
     Route::put('/teaching_schedules/{teaching_schedule}', [TeachingScheduleController::class, 'update'])->name('updateTeachingschedules');
     Route::delete('/teaching_schedules/{teaching_schedule}/delete', [TeachingScheduleController::class, 'destroy'])->name('deleteTeachingschedules');
 
-    // Route untuk manajemen pembayaran
-    Route::get('/payments', [PaymentController::class, 'index'])->name('listPayments');
-    Route::get('/payments/create', [PaymentController::class, 'create'])->name('createPayments');
-    Route::post('/payments', [PaymentController::class, 'store'])->name('storePayments');
-    Route::get('/payments/{payment}', [PaymentController::class, 'show'])->name('showPayments');
-    Route::get('/payments/{payment}/edit', [PaymentController::class, 'edit'])->name('editPayments');
-    Route::put('/payments/{payment}', [PaymentController::class, 'update'])->name('updatePayments');
-    Route::delete('/payments/{payment}/delete', [PaymentController::class, 'destroy'])->name('deletePayments');
+
+});
+
+Route::middleware(['auth', 'siswa'])->group(function () {
+
+    //students route
+    Route::get('/user/gradestudent', [GradeController::class, 'gradestudent'])->name('listgradeStudents');
+    Route::get('/user/indexstudent', [StudentController::class, 'indexstudent'])->name('listindexStudents');
+    Route::get('/user/attendancesstudent', [AttendanceController::class, 'attendancesstudent'])->name('listAttendancesstudent');
+
+    //report routes
+    Route::get('/user/reports/create', [ReportController::class, 'create'])->name('reports.create');
+    Route::post('/reports', [ReportController::class, 'store'])->name('reports.store');
 });
 
 
-require __DIR__.'/auth.php';
+Route::middleware(['auth', 'guru'])->group(function () {
+    
+
+    // Students Routes
+    Route::get('/teachersview/students', [StudentController::class, 'index'])->name('listStudentsview');
+    Route::get('/teachersview/student/create', [StudentController::class, 'create'])->name('createStudentsview');
+    Route::post('/students', [StudentController::class, 'store'])->name('storeStudentsviews');
+    Route::get('/teachersview/students/{student}', [StudentController::class, 'show'])->name('showStudentsviews');
+    Route::get('/teachersview/students/{student}/edit', [StudentController::class, 'edit'])->name('editStudentsviews');
+    Route::put('/students/{student}', [StudentController::class, 'update'])->name('updateStudentsviews');
+    Route::delete('/teachersview//students/{student}/delete', [StudentController::class, 'destroy'])->name('deleteStudentsviews');
+    Route::post('/students/import', [StudentController::class, 'import'])->name('importStudents');
+
+    //grades route
+    Route::get('/teachersview/grades', [GradeController::class, 'index'])->name('listGradesview');
+    Route::get('/teachersview/grades/create', [GradeController::class, 'create'])->name('createGradesview');
+    Route::post('/grades', [GradeController::class, 'store'])->name('storeGradesview');
+    Route::get('/teachersview/grades/{grade}', [GradeController::class, 'show'])->name('showGradesview');
+    Route::get('/teachersview/grades/{grade}/edit', [GradeController::class, 'edit'])->name('editGradesview');
+    Route::put('/grades/{grade}', [GradeController::class, 'update'])->name('updateGradesview');
+    Route::delete('/teachersview//grades/{grade}/delete', [GradeController::class, 'destroy'])->name('deleteGradesview');
+
+    // Attendance Routes
+    Route::get('/teachersview/attendances', [AttendanceController::class, 'index'])->name('listAttendancesview');
+    Route::get('/teachersview/attendances/create', [AttendanceController::class, 'create'])->name('createAttendancesview');
+    Route::post('/attendances', [AttendanceController::class, 'store'])->name('storeAttendancesview');
+    Route::get('/teachersview/attendances/{attendance}', [AttendanceController::class, 'show'])->name('showAttendancesview');
+    Route::get('/teachersview/attendances/{attendance}/edit', [AttendanceController::class, 'edit'])->name('editAttendancesview');
+    Route::put('/attendances/{attendance}', [AttendanceController::class, 'update'])->name('updateAttendancesview');
+    Route::delete('/teachersview/attendances/{attendance}/delete', [AttendanceController::class, 'destroy'])->name('deleteAttendancesview');
+    Route::post('/attendances/import', [AttendanceController::class, 'import'])->name('importAttendances');
+
+    Route::get('/teachersview/indexschedules', [TeachingScheduleController::class, 'indexschedules'])->name('listschedulesview');
+
+    Route::get('/teachersview/indexteacher', [TeacherController::class, 'indexteacher'])->name('listTeachersview');
+});
+
+
+
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+require __DIR__ . '/auth.php';

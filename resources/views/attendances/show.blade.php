@@ -17,9 +17,9 @@
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('listAttendances') }}">Kehadiran</a></li>
-                            <li class="breadcrumb-item active">Detail Kehadiran</li>
+                            <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('listAttendances') }}">Attendances</a></li>
+                            <li class="breadcrumb-item active">Attendance Details</li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -29,24 +29,24 @@
 
         <!-- Main content -->
         <div class="container mt-5">
-            <h1 class="mt-5">Detail Siswa</h1>
+            <h1 class="mt-5">Attendance Details</h1>
             <div class="card">
                 <div class="card-body">
                     <table class="table table-bordered">
                         <tr>
-                            <th>Nama Siswa</th>
+                            <th>Student</th>
                             <td>{{ $attendance->student->name }}</td>
                         </tr>
                         <tr>
-                            <th>Nomor Induk Siswa</th>
+                            <th>Student ID</th>
                             <td>{{ $attendance->student->student_id }}</td>
                         </tr>
                         <tr>
-                            <th>Kelas</th>
+                            <th>Class</th>
                             <td>{{ $attendance->student->class }}</td>
                         </tr>
                         <tr>
-                            <th>Tanggal</th>
+                            <th>Date</th>
                             <td>{{ Carbon::parse($attendance->date)->format('d-m-Y') }}</td>
                         </tr>
                         <tr>
@@ -55,7 +55,7 @@
                         </tr>
                     </table>
                     <br>
-                    <a href="{{ route('listAttendances') }}" class="btn btn-secondary">Kembali</a>
+                    <a href="{{ route('listAttendances') }}" class="btn btn-secondary">Back</a>
                 </div>
             </div>
         </div>

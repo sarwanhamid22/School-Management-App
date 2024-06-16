@@ -6,6 +6,16 @@
 @section('addCss')
     <link rel="stylesheet" href="{{ asset('css/dataTables.bootstrap4.min.css') }}">
     <style>
+        /* Menambahkan kelas khusus untuk mengatur lebar kolom */
+        .col-teacher-id,
+        .col-phone-number,
+        .col-name,
+        .col-specialization,
+        .col-address {
+            width: 15%;
+            text-align: center;
+        }
+
         .action-buttons {
             display: flex;
             justify-content: space-around;
@@ -60,8 +70,8 @@
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                            <li class="breadcrumb-item active">Guru</li>
+                            <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+                            <li class="breadcrumb-item active">Teachers</li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -73,11 +83,11 @@
         <div class="content">
             <div class="container mt-5">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h1>Guru SMK Gamelab</h1>
+                    <h1>Teachers SMK Gamelab</h1>
                     <div>
                         <button class="btn btn-primary mr-2" data-toggle="modal" data-target="#importModal">Import
                             Excel</button>
-                        <a href="{{ route('createTeachers') }}" class="btn btn-primary">Tambah Guru</a>
+                        <a href="{{ route('createTeachers') }}" class="btn btn-primary">Add Teacher</a>
                     </div>
                 </div>
 
@@ -87,22 +97,22 @@
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="importModalLabel">Import Guru Excel File</h5>
+                                <h5 class="modal-title" id="importModalLabel">Import Teachers Excel File</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <form action="{{ route('importTeachers') }}" method="POST" enctype="multipart/form-data">
+                            <form action="" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="modal-body">
                                     <div class="form-group">
-                                        <label for="excel_file">Pilih Excel File</label>
+                                        <label for="excel_file">Choose Excel File</label>
                                         <input type="file" name="excel_file" id="excel_file" accept=".xlsx, .xls"
                                             class="form-control" required>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-primary">Import</button>
                                 </div>
                             </form>
@@ -116,13 +126,13 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th class="col-name">Nama Guru</th>
-                                    <th class="col-teacher-id">Nomor Unik Guru</th>
-                                    <th class="col-specialization">Spesialisasi</th>
-                                    <th class="col-phone-number">Nomor Telefon</th>
-                                    <th class="col-address">Alamat</th>
+                                    <th class="col-name">Name</th>
+                                    <th class="col-teacher-id">Teacher ID</th>
+                                    <th class="col-specialization">Specialization</th>
+                                    <th class="col-phone-number">Phone Number</th>
+                                    <th class="col-address">Address</th>
                                     <th>Email</th>
-                                    <th class="col-actions">Aksi</th>
+                                    <th class="col-actions">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -136,17 +146,13 @@
                                         <td class="col-address">{{ $teacher->address }}</td>
                                         <td>{{ $teacher->email }}</td>
                                         <td class="col-actions action-buttons">
-                                            <a href="{{ route('showTeachers', $teacher) }}" class="btn btn-info btn-sm">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                            <a href="{{ route('editTeachers', $teacher) }}" class="btn btn-warning btn-sm">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
+                                            <a href="{{ route('showTeachers', $teacher) }}"
+                                                class="btn btn-info btn-sm">View</a>
+                                            <a href="{{ route('editTeachers', $teacher) }}"
+                                                class="btn btn-warning btn-sm">Edit</a>
                                             <a href="#" onclick="confirmDelete(this)"
                                                 data-url="{{ route('deleteTeachers', ['teacher' => $teacher->id]) }}"
-                                                class="btn btn-danger btn-sm">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </a>
+                                                class="btn btn-danger btn-sm">Delete</a>
                                             <!-- Form Delete -->
                                             <form id="delete-form" method="POST" style="display: none;">
                                                 @csrf

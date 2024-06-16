@@ -17,6 +17,12 @@ class TeachingScheduleController extends Controller
         $teachingSchedules = TeachingSchedules::with('teacher')->get();
         return view('teaching_schedules.index', compact('teachingSchedules', 'title'));
     }
+    public function indexschedules()
+    {
+        $title = "Kelola Jadwal Guru";
+        $teachingSchedules = TeachingSchedules::with('teacher')->get();
+        return view('teachersview.indexschedules', compact('teachingSchedules', 'title'));
+    }
 
     /**
      * Show the form for creating a new resource.

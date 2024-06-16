@@ -9,52 +9,50 @@
         <div class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
-                    <div class="col-sm-6"></div>
+                    <div class="col-sm-6">
+                    </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('listTeachingschedules') }}">Jadwal Mengajar
-                                    Guru</a></li>
-                            <li class="breadcrumb-item active">Tambah Jadwal Mengajar Guru</li>
+                            <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('listTeachingschedules') }}">Teaching Schedules</a>
+                            </li>
+                            <li class="breadcrumb-item active">Add Teaching Schedule</li>
                         </ol>
-                    </div>
-                </div>
-            </div>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
         </div>
         <!-- /.content-header -->
 
         <!-- Main content -->
         <div class="content">
             <div class="container mt-5">
-                <h1 class="mt-5">Tambah Jadwal Mengajar Guru</h1>
+                <h1 class="mt-5">Add Teaching Schedule</h1>
                 <form action="{{ route('storeTeachingschedules') }}" method="POST">
                     @csrf
                     <div class="form-group">
-                        <label for="teacher_name">Nama Guru <span class="text-danger">*</span></label>
+                        <label for="teacher_name">Teacher</label>
                         <select name="teacher_name" id="teacher_name" class="form-control">
-                            <option selected disabled>Pilih Nama Guru</option>
                             @foreach ($teachers as $teacher)
                                 <option value="{{ $teacher->id }}">{{ $teacher->name }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="teacher_id">Nomor Unik Guru <span class="text-danger">*</span></label>
+                        <label for="teacher_id">Teacher ID</label>
                         <select name="teacher_id" id="teacher_id" class="form-control">
-                            <option selected disabled>Pilih Nomor Unik Guru</option>
                             @foreach ($teachers as $teacher)
                                 <option value="{{ $teacher->id }}">{{ $teacher->teacher_id }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="subject">Subyek <span class="text-danger">*</span></label>
+                        <label for="subject">Subject</label>
                         <input type="text" name="subject" id="subject" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label for="teaching_day">Hari Mengajar <span class="text-danger">*</span></label>
+                        <label for="teaching_day">Teaching Day</label>
                         <select name="teaching_day" id="teaching_day" class="form-control">
-                            <option selected disabled>Pilih Hari Mengajar</option>
                             <option value="Monday">Monday</option>
                             <option value="Tuesday">Tuesday</option>
                             <option value="Wednesday">Wednesday</option>
@@ -65,19 +63,20 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="start_time">Waktu Mulai <span class="text-danger">*</span></label>
+                        <label for="start_time">Start Time</label>
                         <input type="time" name="start_time" id="start_time" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label for="end_time">Waktu Selesai <span class="text-danger">*</span></label>
+                        <label for="end_time">End Time</label>
                         <input type="time" name="end_time" id="end_time" class="form-control" required>
                     </div>
-                    <button type="submit" class="btn btn-primary">Tambah</button>
-                    <a href="{{ route('listTeachingschedules') }}" class="btn btn-secondary">Kembali</a>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <a href="{{ route('listTeachingschedules') }}" class="btn btn-secondary">Back</a>
                 </form>
             </div>
         </div>
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
+
 @endsection

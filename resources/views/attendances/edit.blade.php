@@ -1,43 +1,6 @@
 <!-- resources/views/attendances/edit.blade.php -->
 @extends('layouts.master')
 
-@section('addJavascript')
-    <script src="{{ asset('js/sweetalert.min.js') }}"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Set the date input to today's date
-            var today = new Date().toISOString().split('T')[0];
-            document.getElementById('date').value = today;
-
-            var students = @json($students);
-            var selectedStudentId = '{{ $attendance->student_id }}'; // Mendapatkan ID siswa yang terpilih dari kontroler
-
-            // Menemukan siswa yang sesuai dengan ID yang terpilih
-            var selectedStudent = students.find(student => student.id == selectedStudentId);
-
-            if (selectedStudent) {
-                // Mengisi nilai NIS dan Kelas berdasarkan siswa yang dipilih
-                document.getElementById('nis').value = selectedStudent.student_id;
-                document.getElementById('student_class').value = selectedStudent.class;
-            }
-        });
-
-        confirmDelete = function(button) {
-            var url = $(button).data('url');
-            swal({
-                'title': 'Konfirmasi Hapus',
-                'text': 'Apakah Kamu Yakin Ingin Menghapus Data Ini?',
-                'dangermode': true,
-                'buttons': true
-            }).then(function(value) {
-                if (value) {
-                    window.location = url;
-                }
-            })
-        }
-    </script>
-@endsection
-
 @section('title', 'Edit Attendance')
 
 @section('content')
@@ -52,9 +15,9 @@
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('listAttendances') }}">Kehadiran</a></li>
-                            <li class="breadcrumb-item active">Edit Kehadiran</li>
+                            <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('listAttendances') }}">Attendances</a></li>
+                            <li class="breadcrumb-item active">Edit Attendance</li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -65,38 +28,58 @@
         <!-- Main content -->
         <div class="content">
             <div class="container mt-5">
-                <h1 class="mt-5">Edit Kehadiran</h1>
+                <h1 class="mt-5">Edit Attendance</h1>
                 <form action="{{ route('updateAttendances', $attendance->id) }}" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="form-group">
-                        <label for="student_name">Nama Siswa <span class="text-danger">*</span></label>
-                        <input type="text" id="student_name" class="form-control" value="{{ $attendance->student->name }}" readonly>
-                        <input type="hidden" name="student_id" value="{{ $attendance->student_id }}">
+                        <label for="student_name">Student</label>
+                        <select name="student_name" id="student_name" class="form-control">
+                            @foreach ($students as $student)
+                                <option value="{{ $student->id }}"
+                                    {{ $student->id == $attendance->student_id ? 'selected' : '' }}>{{ $student->name }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="form-group">
-                        <label for="nis">Nomor Induk Siswa <span class="text-danger">*</span></label>
-                        <input type="text" id="nis" name="nis" value="{{ $attendance->student_id }}" class="form-control" readonly>
+                        <label for="student_id">Student ID</label>
+                        <select name="student_id" id="student_id" class="form-control">
+                            @foreach ($students as $student_id)
+                                <option value="{{ $student->id }}"
+                                    {{ $student->id == $attendance->student_id ? 'selected' : '' }}>
+                                    {{ $student->student_id }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="form-group">
-                        <label for="student_class">Kelas <span class="text-danger">*</span></label>
-                        <input type="text" id="student_class" name="student_class" value="{{ $attendance->student->class }}" class="form-control" readonly>
+                        <label for="student_class">Class</label>
+                        <select name="student_class" id="student_class" class="form-control">
+                            @foreach ($students as $student_id)
+                                <option value="{{ $student->id }}"
+                                    {{ $student->id == $attendance->class ? 'selected' : '' }}>{{ $student->class }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="form-group">
-                        <label for="date">Tanggal <span class="text-danger">*</span></label>
-                        <input type="date" name="date" id="date" value="{{ $attendance->date }}" class="form-control" required>
+                        <label for="date">Date</label>
+                        <input type="date" name="date" id="date" value="{{ $attendance->date }}"
+                            class="form-control">
                     </div>
                     <div class="form-group">
-                        <label for="status">Status <span class="text-danger">*</span></label>
+                        <label for="status">Status</label>
                         <select name="status" id="status" class="form-control">
-                            <option value="Present" {{ $attendance->status == 'Present' ? 'selected' : '' }}>Present</option>
+                            <option value="Present" {{ $attendance->status == 'Present' ? 'selected' : '' }}>Present
+                            </option>
                             <option value="Absent" {{ $attendance->status == 'Absent' ? 'selected' : '' }}>Absent</option>
                             <option value="Late" {{ $attendance->status == 'Late' ? 'selected' : '' }}>Late</option>
-                            <option value="Excused" {{ $attendance->status == 'Excused' ? 'selected' : '' }}>Excused</option>
+                            <option value="Excused" {{ $attendance->status == 'Excused' ? 'selected' : '' }}>Excused
+                            </option>
                         </select>
                     </div>
                     <button type="submit" class="btn btn-primary">Update</button>
-                    <a href="{{ route('listAttendances') }}" class="btn btn-secondary">Kembali</a>
+                    <a href="{{ route('listAttendances') }}" class="btn btn-secondary">Back</a>
                 </form>
             </div>
         </div>

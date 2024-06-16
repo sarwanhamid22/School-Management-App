@@ -47,8 +47,8 @@
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                            <li class="breadcrumb-item active">Nilai</li>
+                            <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+                            <li class="breadcrumb-item active">Grades</li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -60,8 +60,8 @@
         <div class="content">
             <div class="container mt-5">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h1>Nilai Siswa SMK Gamelab</h1>
-                    <a href="{{ route('createGrades') }}" class="btn btn-primary">Tambah Nilai</a>
+                    <h1>Grades Students SMK Gamelab</h1>
+                    <a href="{{ route('createGrades') }}" class="btn btn-primary">Add Grade</a>
                 </div>
 
                 <div class="card">
@@ -70,12 +70,12 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Nama Siswa</th>
-                                    <th>Nomor Induk Siswa</th>
-                                    <th>Kelas</th>
-                                    <th>Subyek</th>
-                                    <th>Nilai</th>
-                                    <th>Aksi</th>
+                                    <th>Student</th>
+                                    <th>Student ID</th>
+                                    <th>Class</th>
+                                    <th>Subject</th>
+                                    <th>Grade</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -88,17 +88,13 @@
                                         <td>{{ $grade->subject }}</td>
                                         <td>{{ $grade->grade }}</td>
                                         <td>
-                                            <a href="{{ route('showGrades', $grade) }}" class="btn btn-info btn-sm">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                            <a href="{{ route('editGrades', $grade) }}" class="btn btn-warning btn-sm">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
+                                            <a href="{{ route('showGrades', $grade) }}"
+                                                class="btn btn-info btn-sm">View</a>
+                                            <a href="{{ route('editGrades', $grade) }}"
+                                                class="btn btn-warning btn-sm">Edit</a>
                                             <a href="#" onclick="confirmDelete(this)"
                                                 data-url="{{ route('deleteGrades', ['grade' => $grade->id]) }}"
-                                                class="btn btn-danger btn-sm">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </a>
+                                                class="btn btn-danger btn-sm">Delete</a>
                                             <!-- Form Delete -->
                                             <form id="delete-form" method="POST" style="display: none;">
                                                 @csrf

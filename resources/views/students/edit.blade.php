@@ -15,9 +15,9 @@
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('listStudents') }}">Siswa</a></li>
-                            <li class="breadcrumb-item active">Edit Siswa</li>
+                            <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('listStudents') }}">Students</a></li>
+                            <li class="breadcrumb-item active">Edit Student</li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -27,62 +27,42 @@
         <!-- Main content -->
         <div class="content">
             <div class="container mt-5">
-                <h1 class="mt-5">Edit Siswa</h1>
-                <form action="{{ route('updateStudents', $student) }}" method="POST" enctype="multipart/form-data">
+                <h1 class="mb-4">Edit Student</h1>
+                <form action="{{ route('updateStudents', $student) }}" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="form-group">
-                        <label for="name">Nama Siswa <span class="text-danger">*</span></label>
+                        <label for="name">Name</label>
                         <input type="text" name="name" id="name" class="form-control"
                             value="{{ $student->name }}" required>
                     </div>
                     <div class="form-group">
-                        <label for="student_id">Nomor Induk Siswa <span class="text-danger">*</span></label>
+                        <label for="student_id">Student ID</label>
                         <input type="text" name="student_id" id="student_id" class="form-control"
                             value="{{ $student->student_id }}" required>
                     </div>
                     <div class="form-group">
-                        <label for="class">Kelas <span class="text-danger">*</span></label>
-                        <select class="form-control" id="class" name="class" required>
-                            <option selected disabled>Pilih Kelas</option>
-                            <option value="10" {{ $student->class == 10 ? 'selected' : '' }}>10</option>
-                            <option value="11" {{ $student->class == 11 ? 'selected' : '' }}>11</option>
-                            <option value="12" {{ $student->class == 12 ? 'selected' : '' }}>12</option>
-                        </select>
+                        <label for="class">Class</label>
+                        <input type="text" name="class" id="class" class="form-control"
+                            value="{{ $student->class }}" required>
                     </div>
                     <div class="form-group">
-                        <label for="birth_date">Tanggal Lahir <span class="text-danger">*</span></label>
+                        <label for="birth_date">Birth Date</label>
                         <input type="date" name="birth_date" id="birth_date" class="form-control"
                             value="{{ $student->birth_date }}" required>
                     </div>
                     <div class="form-group">
-                        <label for="address">Alamat <span class="text-danger">*</span></label>
+                        <label for="address">Address</label>
                         <input type="text" name="address" id="address" class="form-control"
                             value="{{ $student->address }}" required>
                     </div>
                     <div class="form-group">
-                        <label for="phone_number">Nomor Telepon <span class="text-danger">*</span></label>
+                        <label for="phone_number">Phone Number</label>
                         <input type="text" name="phone_number" id="phone_number" class="form-control"
                             value="{{ $student->phone_number }}" required>
                     </div>
-                    <div class="form-group">
-                        <label for="email">Email <span class="text-danger">*</span></label>
-                        <input type="email" name="email" id="email" class="form-control"
-                            value="{{ $student->email }}" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password (kosongkan jika tidak ingin mengubah)</label>
-                        <input type="password" name="password" id="password" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label for="photo">Foto (kosongkan jika tidak ingin mengubah)</label>
-                        <input type="file" name="photo" class="form-control-file" id="photo">
-                        @if($student->photo)
-                            <img src="{{ asset('storage/photos/' . $student->photo) }}" alt="Current Photo" width="100" class="mt-2">
-                        @endif
-                    </div>
                     <button type="submit" class="btn btn-primary">Update</button>
-                    <a href="{{ route('listStudents') }}" class="btn btn-secondary">Kembali</a>
+                    <a href="{{ route('listStudents') }}" class="btn btn-secondary">Back</a>
                 </form>
             </div>
         </div>

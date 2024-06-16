@@ -14,9 +14,9 @@
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('listGrades') }}">Nilai</a></li>
-                            <li class="breadcrumb-item active">Detail Nilai</li>
+                            <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('listGrades') }}">Grades</a></li>
+                            <li class="breadcrumb-item active">Grade Details</li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -31,28 +31,28 @@
                 <div class="card-body">
                     <table class="table table-bordered">
                         <tr>
-                            <th>Nama Siswa</th>
+                            <th>Student</th>
                             <td>{{ $grade->student->name }}</td>
                         </tr>
                         <tr>
-                            <th>Nomor Induk Siswa</th>
+                            <th>Student ID</th>
                             <td>{{ $grade->student->student_id }}</td>
                         </tr>
                         <tr>
-                            <th>Kelas</th>
+                            <th>Class</th>
                             <td>{{ $grade->student->class }}</td>
                         </tr>
                         <tr>
-                            <th>Subyek</th>
+                            <th>Subject</th>
                             <td>{{ $grade->subject }}</td>
                         </tr>
                         <tr>
-                            <th>Nilai</th>
+                            <th>Grade</th>
                             <td>{{ $grade->grade }}</td>
                         </tr>
                     </table>
                     <br>
-                    <a href="{{ route('listGrades') }}" class="btn btn-secondary">Kembali</a>
+                    <a href="{{ route('listGrades') }}" class="btn btn-secondary">Back</a>
                 </div>
             </div>
         </div>

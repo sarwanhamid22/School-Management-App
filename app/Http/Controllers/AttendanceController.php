@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Attendances;
 use App\Models\Students;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AttendanceController extends Controller
 {
@@ -13,9 +14,18 @@ class AttendanceController extends Controller
      */
     public function index()
     {
-        $title = "Kelola Kehadiran Siswa";
-        $attendances = Attendances::with('student')->get();
-        return view('attendances.index', compact('attendances', 'title'));
+        if (Auth::id()) {
+            $usertype = Auth()->user()->userType;
+            if ($usertype == 'admin') {
+                $title = "Kelola Kehadiran Siswa";
+                $attendances = Attendances::with('student')->get();
+                return view('attendances.index', compact('attendances', 'title'));
+            } else if ($usertype == 'guru') {
+                $title = "Kelola Kehadiran Siswa";
+                $attendances = Attendances::with('student')->get();
+                return view('teachersview.attendances.index', compact('attendances', 'title'));
+            }
+        }
     }
 
     /**
@@ -23,9 +33,19 @@ class AttendanceController extends Controller
      */
     public function create()
     {
-        $title = "Tambah Kehadiran Siswa";
-        $students = Students::all();
-        return view('attendances.create', compact('students', 'title'));
+
+        if (Auth::id()) {
+            $usertype = Auth()->user()->userType;
+            if ($usertype == 'admin') {
+                $title = "Tambah Kehadiran Siswa";
+                $students = Students::all();
+                return view('attendances.create', compact('students', 'title'));
+            } else if ($usertype == 'guru') {
+                $title = "Tambah Kehadiran Siswa";
+                $students = Students::all();
+                return view('teachersview.attendances.create', compact('students', 'title'));
+            }
+        }
     }
 
     /**
@@ -33,14 +53,29 @@ class AttendanceController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'student_id' => 'required',
-            'date' => 'required|date',
-            'status' => 'required|in:Present,Absent,Late,Excused',
-        ]);
 
-        Attendances::create($request->all());
-        return redirect()->route('listAttendances')->with('success', 'Attendance Recorded Successfully');
+        if (Auth::id()) {
+            $usertype = Auth()->user()->userType;
+            if ($usertype == 'admin') {
+                $request->validate([
+                    'student_id' => 'required|exists:students,id',
+                    'date' => 'required|date',
+                    'status' => 'required|in:Present,Absent,Late,Excused',
+                ]);
+
+                Attendances::create($request->all());
+                return redirect()->route('listAttendances')->with('success', 'Attendance Recorded Successfully');
+            } else if ($usertype == 'guru') {
+                $request->validate([
+                    'student_id' => 'required|exists:students,id',
+                    'date' => 'required|date',
+                    'status' => 'required|in:Present,Absent,Late,Excused',
+                ]);
+
+                Attendances::create($request->all());
+                return redirect()->route('listAttendancesview')->with('success', 'Attendance Recorded Successfully');
+            }
+        }
     }
 
     /**
@@ -48,8 +83,17 @@ class AttendanceController extends Controller
      */
     public function show(Attendances $attendance)
     {
-        $title = "Detail Kehadiran Siswa";
-        return view('attendances.show', compact('attendance', 'title'));
+
+        if (Auth::id()) {
+            $usertype = Auth()->user()->userType;
+            if ($usertype == 'admin') {
+                $title = "Detail Kehadiran Siswa";
+                return view('attendances.show', compact('attendance', 'title'));
+            } else if ($usertype == 'guru') {
+                $title = "Detail Kehadiran Siswa";
+                return view('teachersview.attendances.show', compact('attendance', 'title'));
+            }
+        }
     }
 
     /**
@@ -57,9 +101,19 @@ class AttendanceController extends Controller
      */
     public function edit(Attendances $attendance)
     {
-        $title = "Edit Kehadiran Siswa";
-        $students = Students::all();
-        return view('attendances.edit', compact('attendance', 'students', 'title'));
+
+        if (Auth::id()) {
+            $usertype = Auth()->user()->userType;
+            if ($usertype == 'admin') {
+                $title = "Edit Kehadiran Siswa";
+                $students = Students::all();
+                return view('attendances.edit', compact('attendance', 'students', 'title'));
+            } else if ($usertype == 'guru') {
+                $title = "Edit Kehadiran Siswa";
+                $students = Students::all();
+                return view('teachersview.attendances.edit', compact('attendance', 'students', 'title'));
+            }
+        }
     }
 
     /**
@@ -67,14 +121,29 @@ class AttendanceController extends Controller
      */
     public function update(Request $request, Attendances $attendance)
     {
-        $request->validate([
-            'student_id' => 'required',
-            'date' => 'required|date',
-            'status' => 'required|in:Present,Absent,Late,Excused',
-        ]);
 
-        $attendance->update($request->all());
-        return redirect()->route('listAttendances')->with('success', 'Attendance Updated Successfully');
+        if (Auth::id()) {
+            $usertype = Auth()->user()->userType;
+            if ($usertype == 'admin') {
+                $request->validate([
+                    'student_id' => 'required|exists:students,id',
+                    'date' => 'required|date',
+                    'status' => 'required|in:Present,Absent,Late,Excused',
+                ]);
+        
+                $attendance->update($request->all());
+                return redirect()->route('listAttendances')->with('success', 'Attendance Updated Successfully');
+            } else if ($usertype == 'guru') {
+                $request->validate([
+                    'student_id' => 'required|exists:students,id',
+                    'date' => 'required|date',
+                    'status' => 'required|in:Present,Absent,Late,Excused',
+                ]);
+        
+                $attendance->update($request->all());
+                return redirect()->route('listAttendancesview')->with('success', 'Attendance Updated Successfully');
+            }
+        }
     }
 
     /**
@@ -82,7 +151,22 @@ class AttendanceController extends Controller
      */
     public function destroy(Attendances $attendance)
     {
-        $attendance->delete();
-        return redirect()->route('listAttendances')->with('success', 'Attendance deleted successfully');
+
+        if (Auth::id()) {
+            $usertype = Auth()->user()->userType;
+            if ($usertype == 'admin') {
+                $attendance->delete();
+                return redirect()->route('listAttendances')->with('success', 'Attendance deleted successfully');
+            } else if ($usertype == 'guru') {
+                $attendance->delete();
+                return redirect()->route('listAttendancesview')->with('success', 'Attendance deleted successfully');
+            }
+        }
+    }
+
+    public function attendancesstudent()
+    {
+        $attendances = Attendances::with('student')->get();
+        return view('user.attendancesstudent', compact('attendances'));
     }
 }

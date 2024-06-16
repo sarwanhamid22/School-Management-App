@@ -15,13 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('student_id')->unique();
-            $table->integer('class');
+            $table->string('class');
             $table->date('birth_date');
-            $table->string('address');
-            $table->string('phone_number');
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->string('photo')->nullable();
+            $table->text('address');
+            $table->string('phone_number', 15);
             $table->timestamps();
             $table->softDeletes();
         });

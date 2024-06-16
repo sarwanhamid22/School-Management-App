@@ -45,7 +45,7 @@ class PaymentController extends Controller
         ]);
 
         Payments::create($request->all());
-        return redirect()->route('listPayments')->with('success', 'Payment Created Successfully');
+        return redirect()->route('listStudents')->with('success', 'Payment Created Successfully');
     }
 
     /**
@@ -60,38 +60,24 @@ class PaymentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Payments $payment)
+    public function edit(Payments $payments)
     {
-        $title = "Edit Pembayaran";
-        $students = Students::all();
-        return view('payments.edit', compact('payment', 'students', 'title'));
+        //
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Payments $payment)
+    public function update(Request $request, Payments $payments)
     {
-        $request->validate([
-            'student_id' => 'required|exists:students,id',
-            'academic_year' => 'required|string',
-            'payment_type' => 'required|array',
-            'amount' => 'required|numeric',
-            'payment_date' => 'required|date',
-            'status' => 'required|boolean',
-            'description' => 'nullable|string',
-        ]);
-
-        $payment->update($request->all());
-        return redirect()->route('listPayments')->with('success', 'Payment Updated Successfully');
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Payments $payment)
+    public function destroy(Payments $payments)
     {
-        $payment->delete();
-        return redirect()->route('listPayments')->with('success', 'Payment Deleted Successfully');
+        //
     }
 }

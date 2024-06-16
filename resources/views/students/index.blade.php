@@ -1,3 +1,4 @@
+<!-- resources/views/students/index.blade.php -->
 @extends('layouts.master')
 @php
     use Carbon\Carbon;
@@ -17,26 +18,20 @@
         .action-buttons button {
             margin: 0 2px;
         }
-
-        .modal-close-btn {
-            position: absolute;
-            right: 15px;
-            top: 15px;
-            z-index: 1051;
-            /* Set higher z-index */
-        }
     </style>
 @endsection
 
 @section('addJavascript')
     <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('js/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('js/sweetalert.min.js') }}"></script>
+    {{-- Script tambahan inisialisasi datatables --}}
     <script>
         $(function() {
             $("#data-table").DataTable();
         });
-
+    </script>
+    <script src="{{ asset('js/sweetalert.min.js') }}"></script>
+    <script>
         function confirmDelete(button) {
             var url = $(button).data('url');
             swal({
@@ -68,8 +63,8 @@
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                            <li class="breadcrumb-item active">Siswa</li>
+                            <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
+                            <li class="breadcrumb-item active">Students</li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -80,11 +75,11 @@
         <div class="content">
             <div class="container mt-5">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h1>Siswa SMK Gamelab</h1>
+                    <h1>Students SMK Gamelab</h1>
                     <div>
                         <button class="btn btn-primary mr-2" data-toggle="modal" data-target="#importModal">Import
                             Excel</button>
-                        <a href="{{ route('createStudents') }}" class="btn btn-primary">Tambah Siswa</a>
+                        <a href="{{ route('createStudents') }}" class="btn btn-primary">Add Student</a>
                     </div>
                 </div>
 
@@ -94,7 +89,7 @@
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="importModalLabel">Import Siswa Excel File</h5>
+                                <h5 class="modal-title" id="importModalLabel">Import Students Excel File</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -103,13 +98,13 @@
                                 @csrf
                                 <div class="modal-body">
                                     <div class="form-group">
-                                        <label for="excel_file">Pilih Excel File</label>
+                                        <label for="excel_file">Choose Excel File</label>
                                         <input type="file" name="excel_file" id="excel_file" accept=".xlsx, .xls"
                                             class="form-control" required>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-primary">Import</button>
                                 </div>
                             </form>
@@ -124,47 +119,33 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Foto</th>
-                                    <th>Nama Siswa</th>
-                                    <th>Nomor Induk Siswa</th>
-                                    <th>Kelas</th>
-                                    <th>Tanggal Kelahiran</th>
-                                    <th>Alamat</th>
-                                    <th>Nomor Telepon</th>
-                                    <th>Email</th>
-                                    <th>Aksi</th>
+                                    <th>Name</th>
+                                    <th>Student ID</th>
+                                    <th>Class</th>
+                                    <th>Birth Date</th>
+                                    <th>Address</th>
+                                    <th>Phone Number</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($students as $student)
                                     <tr>
                                         <td>{{ $loop->index + 1 }}</td>
-                                        <td>
-                                            @if ($student->photo)
-                                                <img src="{{ asset('storage/photos/' . $student->photo) }}" alt="Student Photo" width="50">
-                                            @else
-                                                <span>No Photo</span>
-                                            @endif
-                                        </td>
                                         <td>{{ $student->name }}</td>
                                         <td>{{ $student->student_id }}</td>
                                         <td>{{ $student->class }}</td>
                                         <td>{{ Carbon::parse($student->birth_date)->format('d-m-Y') }}</td>
                                         <td>{{ $student->address }}</td>
                                         <td>{{ $student->phone_number }}</td>
-                                        <td>{{ $student->email }}</td>
                                         <td class="action-buttons">
-                                            <a href="{{ route('showStudents', $student) }}" class="btn btn-info btn-sm">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                            <a href="{{ route('editStudents', $student) }}" class="btn btn-warning btn-sm">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
+                                            <a href="{{ route('showStudents', $student) }}"
+                                                class="btn btn-info btn-sm">View</a>
+                                            <a href="{{ route('editStudents', $student) }}"
+                                                class="btn btn-warning btn-sm">Edit</a>
                                             <a href="#" onclick="confirmDelete(this)"
                                                 data-url="{{ route('deleteStudents', ['student' => $student->id]) }}"
-                                                class="btn btn-danger btn-sm">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </a>
+                                                class="btn btn-danger btn-sm">Delete</a>
                                             <!-- Form Delete -->
                                             <form id="delete-form" method="POST" style="display: none;">
                                                 @csrf

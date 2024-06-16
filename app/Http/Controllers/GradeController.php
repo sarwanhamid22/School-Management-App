@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Grades;
 use App\Models\Students;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class GradeController extends Controller
 {
@@ -13,9 +14,19 @@ class GradeController extends Controller
      */
     public function index()
     {
-        $title = "Kelola Nilai Siswa";
-        $grades = Grades::with('student')->get();
-        return view('grades.index', compact('grades', 'title'));
+
+        if (Auth::id()) {
+            $usertype = Auth()->user()->userType;
+            if ($usertype == 'admin') {
+                $title = "Kelola Nilai Siswa";
+                $grades = Grades::with('student')->get();
+                return view('grades.index', compact('grades', 'title'));
+            } else if ($usertype == 'guru') {
+                $title = "Kelola Nilai Siswa";
+                $grades = Grades::with('student')->get();
+                return view('teachersview.grades.index', compact('grades', 'title'));
+            }
+        }
     }
 
     /**
@@ -23,9 +34,19 @@ class GradeController extends Controller
      */
     public function create()
     {
-        $title = "Tambah Nilai Siswa";
-        $students = Students::all();
-        return view('grades.create', compact('students', 'title'));
+
+        if (Auth::id()) {
+            $usertype = Auth()->user()->userType;
+            if ($usertype == 'admin') {
+                $title = "Tambah Nilai Siswa";
+                $students = Students::all();
+                return view('grades.create', compact('students', 'title'));
+            } else if ($usertype == 'guru') {
+                $title = "Tambah Nilai Siswa";
+                $students = Students::all();
+                return view('teachersview.grades.create', compact('students', 'title'));
+            }
+        }
     }
 
     /**
@@ -33,14 +54,29 @@ class GradeController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'student_id' => 'required|exists:students,id',
-            'subject' => 'required|string',
-            'grade' => 'required|numeric|between:0,100',
-        ]);
 
-        Grades::create($request->all());
-        return redirect()->route('listGrades')->with('success', 'Grade Recorded Successfully');
+        if (Auth::id()) {
+            $usertype = Auth()->user()->userType;
+            if ($usertype == 'admin') {
+                $request->validate([
+                    'student_id' => 'required|exists:students,id',
+                    'subject' => 'required|string',
+                    'grade' => 'required|numeric|between:0,100',
+                ]);
+
+                Grades::create($request->all());
+                return redirect()->route('listGrades')->with('success', 'Grade Recorded Successfully');
+            } else if ($usertype == 'guru') {
+                $request->validate([
+                    'student_id' => 'required|exists:students,id',
+                    'subject' => 'required|string',
+                    'grade' => 'required|numeric|between:0,100',
+                ]);
+
+                Grades::create($request->all());
+                return redirect()->route('listGradesview')->with('success', 'Grade Recorded Successfully');
+            }
+        }
     }
 
     /**
@@ -48,8 +84,17 @@ class GradeController extends Controller
      */
     public function show(Grades $grade)
     {
-        $title = "Detail Nilai Siswa";
-        return view('grades.show', compact('grade', 'title'));
+
+        if (Auth::id()) {
+            $usertype = Auth()->user()->userType;
+            if ($usertype == 'admin') {
+                $title = "Detail Nilai Siswa";
+                return view('grades.show', compact('grade', 'title'));
+            } else if ($usertype == 'guru') {
+                $title = "Detail Nilai Siswa";
+                return view('teachersview.grades.show', compact('grade', 'title'));
+            }
+        }
     }
 
     /**
@@ -57,9 +102,19 @@ class GradeController extends Controller
      */
     public function edit(Grades $grade)
     {
-        $title = "Edit Nilai Siswa";
-        $students = Students::all();
-        return view('grades.edit', compact('grade', 'students', 'title'));
+
+        if (Auth::id()) {
+            $usertype = Auth()->user()->userType;
+            if ($usertype == 'admin') {
+                $title = "Edit Nilai Siswa";
+                $students = Students::all();
+                return view('grades.edit', compact('grade', 'students', 'title'));
+            } else if ($usertype == 'guru') {
+                $title = "Edit Nilai Siswa";
+                $students = Students::all();
+                return view('teachersview.grades.edit', compact('grade', 'students', 'title'));
+            }
+        }
     }
 
     /**
@@ -67,14 +122,29 @@ class GradeController extends Controller
      */
     public function update(Request $request, Grades $grade)
     {
-        $request->validate([
-            'student_id' => 'required|exists:students,id',
-            'subject' => 'required|string',
-            'grade' => 'required|numeric|between:0,100',
-        ]);
 
-        $grade->update($request->all());
-        return redirect()->route('listGrades')->with('success', 'Grade Updated Successfully');
+        if (Auth::id()) {
+            $usertype = Auth()->user()->userType;
+            if ($usertype == 'admin') {
+                $request->validate([
+                    'student_id' => 'required|exists:students,id',
+                    'subject' => 'required|string',
+                    'grade' => 'required|numeric|between:0,100',
+                ]);
+
+                $grade->update($request->all());
+                return redirect()->route('listGrades')->with('success', 'Grade Updated Successfully');
+            } else if ($usertype == 'guru') {
+                $request->validate([
+                    'student_id' => 'required|exists:students,id',
+                    'subject' => 'required|string',
+                    'grade' => 'required|numeric|between:0,100',
+                ]);
+
+                $grade->update($request->all());
+                return redirect()->route('listGradesview')->with('success', 'Grade Updated Successfully');
+            }
+        }
     }
 
     /**
@@ -82,7 +152,22 @@ class GradeController extends Controller
      */
     public function destroy(Grades $grade)
     {
-        $grade->delete();
-        return redirect()->route('listGrades')->with('success', 'Grade Deleted Successfully');
+
+        if (Auth::id()) {
+            $usertype = Auth()->user()->userType;
+            if ($usertype == 'admin') {
+                $grade->delete();
+                return redirect()->route('listGrades')->with('success', 'Grade Deleted Successfully');
+            } else if ($usertype == 'guru') {
+                $grade->delete();
+                return redirect()->route('listGradesview')->with('success', 'Grade Deleted Successfully');
+            }
+        }
+    }
+
+    public function gradestudent()
+    {
+        $grades = Grades::with('student')->get();
+        return view('user.gradestudent', compact('grades'));
     }
 }

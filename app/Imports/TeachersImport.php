@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Log;
 
 class TeachersImport implements ToModel, WithHeadingRow
 {
+    /**
+    * @param array $row
+    *
+    * @return \Illuminate\Database\Eloquent\Model|null
+    */
     public function model(array $row)
     {
         // Clean column names by removing trailing single quotes
@@ -21,22 +26,18 @@ class TeachersImport implements ToModel, WithHeadingRow
         // Log the cleaned row for debugging
         Log::info('Imported Row: ', $cleanedRow);
 
-        // Check if required keys exist and are not null
-        $requiredKeys = ['name', 'teacher_id', 'specialization', 'phone_number', 'address', 'email'];
-        foreach ($requiredKeys as $key) {
-            if (!isset($cleanedRow[$key]) || is_null($cleanedRow[$key])) {
-                Log::error("Missing or null field '{$key}' in row: ", $cleanedRow);
-                return null; // Skip this row if any required field is missing or null
-            }
+        // Check if 'name' key exists and is not null
+        if (!isset($cleanedRow['name']) || is_null($cleanedRow['name'])) {
+            Log::error('Missing or null name field in row: ', $cleanedRow);
+            return null; // Skip this row if 'name' is missing or null
         }
 
         return new Teachers([
-            'name' => $cleanedRow['name'],
-            'teacher_id' => $cleanedRow['teacher_id'],
-            'specialization' => $cleanedRow['specialization'],
-            'phone_number' => $cleanedRow['phone_number'],
-            'address' => $cleanedRow['address'],
-            'email' => $cleanedRow['email'],
+            'name' => $row['name'],
+            'class' => $row['class'],
+            'birth_date' => \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['birth_date']),
+            'address' => $row['address'],
+            'phone_number' => $row['phone_number'],
         ]);
     }
 }
